@@ -1,0 +1,6 @@
+boto3==1.9.80
+google-api-python-client==1.7.7
+graphviz==0.10.1
+pexpect==4.6.0
+pytest==4.0.1
+pytest-mock==1.10.0
