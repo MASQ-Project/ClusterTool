@@ -102,8 +102,12 @@ class TestInit:
             mocker.call("Configured node-5 on Amazon2 (EC2)")
         ]
 
-        assert mock_input.called_with("Where would you like TNT to run nodes? ('cloud', 'vbox', 'docker' or blank to cancel) ")
-        assert mock_input.called_with("How many instances do you want to use? (1-4, or 'all', blank to cancel")
+        assert mock_input.mock_calls == [
+            mocker.call("Where would you like TNT to run nodes? ('cloud', 'vbox', 'docker' or blank to cancel) "),
+            mocker.call().strip(),
+            mocker.call("How many instances do you want to use? (1-4, or 'all', blank to cancel) "),
+            mocker.call().strip()
+        ]
 
         assert subject.INSTANCES['bootstrap'].name == 'bootstrap'
         assert subject.INSTANCES['node-1'].name == 'node-1'
@@ -142,8 +146,12 @@ class TestInit:
             mocker.call("Configured node-2 on Google1 (Compute)")
         ]
 
-        assert mock_input.called_with("Where would you like TNT to run nodes? ('cloud', 'vbox', 'docker' or blank to cancel) ")
-        assert mock_input.called_with("How many instances do you want to use? (1-4, or 'all', blank to cancel")
+        assert mock_input.mock_calls == [
+            mocker.call("Where would you like TNT to run nodes? ('cloud', 'vbox', 'docker' or blank to cancel) "),
+            mocker.call().strip(),
+            mocker.call("How many instances do you want to use? (1-4, or 'all', blank to cancel) "),
+            mocker.call().strip()
+        ]
 
         assert subject.INSTANCES['bootstrap'].name == 'bootstrap'
         assert subject.INSTANCES['node-1'].name == 'node-1'
@@ -176,8 +184,12 @@ class TestInit:
             mocker.call("Configured node-2 on VBox1 (VirtualBox)")
         ]
 
-        assert mock_input.called_with("Where would you like TNT to run nodes? ('cloud', 'vbox', 'docker' or blank to cancel) ")
-        assert mock_input.called_with("How many instances do you want to use? (1-4, or 'all', blank to cancel")
+        assert mock_input.mock_calls == [
+            mocker.call("Where would you like TNT to run nodes? ('cloud', 'vbox', 'docker' or blank to cancel) "),
+            mocker.call().strip(),
+            mocker.call("How many instances do you want to use? (1-2, or 'all', blank to cancel) "),
+            mocker.call().strip()
+        ]
 
         assert subject.INSTANCES['bootstrap'].name == 'bootstrap'
         assert subject.INSTANCES['node-1'].name == 'node-1'
@@ -209,8 +221,12 @@ class TestInit:
             mocker.call("Configured node-2 on Docker1 (Docker)")
         ]
 
-        assert mock_input.called_with("Where would you like TNT to run nodes? ('cloud', 'vbox', 'docker' or blank to cancel) ")
-        assert mock_input.called_with("How many instances do you want to use? (1-4, or 'all', blank to cancel")
+        assert mock_input.mock_calls == [
+            mocker.call("Where would you like TNT to run nodes? ('cloud', 'vbox', 'docker' or blank to cancel) "),
+            mocker.call().strip(),
+            mocker.call("How many instances do you want to use? (1-2, or 'all', blank to cancel) "),
+            mocker.call().strip()
+        ]
 
         assert subject.INSTANCES['bootstrap'].name == 'bootstrap'
         assert subject.INSTANCES['node-1'].name == 'node-1'
@@ -242,8 +258,12 @@ class TestInit:
             mocker.call("Configured bootstrap on Google1 (Compute)")
         ]
 
-        assert mock_input.called_with("Where would you like TNT to run nodes? ('cloud', 'vbox', 'docker' or blank to cancel) ")
-        assert mock_input.called_with("How many instances do you want to use? (1-4, or 'all', blank to cancel")
+        assert mock_input.mock_calls == [
+            mocker.call("Where would you like TNT to run nodes? ('cloud', 'vbox', 'docker' or blank to cancel) "),
+            mocker.call().strip(),
+            mocker.call("How many instances do you want to use? (1-4, or 'all', blank to cancel) "),
+            mocker.call().strip()
+        ]
 
         assert subject.INSTANCES['bootstrap'].name == 'bootstrap'
         assert len(subject.COMPUTE_INSTANCES) == 1
@@ -270,8 +290,12 @@ class TestInit:
             mocker.call('invalidgroup is not a valid platform group. Try again')
         ]
 
-        assert mock_input.called_with(
-            "Where would you like TNT to run nodes? ('cloud', 'vbox', 'docker' or blank to cancel) ")
+        assert mock_input.mock_calls == [
+            mocker.call("Where would you like TNT to run nodes? ('cloud', 'vbox', 'docker' or blank to cancel) "),
+            mocker.call().strip(),
+            mocker.call("Where would you like TNT to run nodes? ('cloud', 'vbox', 'docker' or blank to cancel) "),
+            mocker.call().strip()
+        ]
 
         assert len(subject.INSTANCES) == 2
 
@@ -293,9 +317,12 @@ class TestInit:
             mocker.call("\tDocker: ['Docker1', 'Docker2']\n")
         ]
 
-        assert mock_input.called_with(
-            "Where would you like TNT to run nodes? ('cloud', 'vbox', 'docker' or blank to cancel) ")
-        assert mock_input.called_with("How many instances do you want to use? (1-4, or 'all', blank to cancel")
+        assert mock_input.mock_calls == [
+            mocker.call("Where would you like TNT to run nodes? ('cloud', 'vbox', 'docker' or blank to cancel) "),
+            mocker.call().strip(),
+            mocker.call("How many instances do you want to use? (1-4, or 'all', blank to cancel) "),
+            mocker.call().strip()
+        ]
 
         assert len(subject.INSTANCES) == 2
 
@@ -317,9 +344,12 @@ class TestInit:
             mocker.call("\tDocker: ['Docker1', 'Docker2']\n")
         ]
 
-        assert mock_input.called_with(
-            "Where would you like TNT to run nodes? ('cloud', 'vbox', 'docker' or blank to cancel) ")
-        assert mock_input.called_with("How many instances do you want to use? (1-4, or 'all', blank to cancel")
+        assert mock_input.mock_calls == [
+            mocker.call("Where would you like TNT to run nodes? ('cloud', 'vbox', 'docker' or blank to cancel) "),
+            mocker.call().strip(),
+            mocker.call("How many instances do you want to use? (1-4, or 'all', blank to cancel) "),
+            mocker.call().strip()
+        ]
 
         assert len(subject.INSTANCES) == 2
 
@@ -342,9 +372,14 @@ class TestInit:
             mocker.call('5 is not in range 1-4. Try again')
         ]
 
-        assert mock_input.called_with(
-            "Where would you like TNT to run nodes? ('cloud', 'vbox', 'docker' or blank to cancel) ")
-        assert mock_input.called_with("How many instances do you want to use? (1-4, or 'all', blank to cancel")
+        assert mock_input.mock_calls == [
+            mocker.call("Where would you like TNT to run nodes? ('cloud', 'vbox', 'docker' or blank to cancel) "),
+            mocker.call().strip(),
+            mocker.call("How many instances do you want to use? (1-4, or 'all', blank to cancel) "),
+            mocker.call().strip(),
+            mocker.call("How many instances do you want to use? (1-4, or 'all', blank to cancel) "),
+            mocker.call().strip()
+        ]
 
         assert len(subject.INSTANCES) == 2
 
@@ -367,8 +402,13 @@ class TestInit:
             mocker.call("shouldbenumber isn't a number. Try again")
         ]
 
-        assert mock_input.called_with(
-            "Where would you like TNT to run nodes? ('cloud', 'vbox', 'docker' or blank to cancel) ")
-        assert mock_input.called_with("How many instances do you want to use? (1-4, or 'all', blank to cancel")
+        assert mock_input.mock_calls == [
+            mocker.call("Where would you like TNT to run nodes? ('cloud', 'vbox', 'docker' or blank to cancel) "),
+            mocker.call().strip(),
+            mocker.call("How many instances do you want to use? (1-4, or 'all', blank to cancel) "),
+            mocker.call().strip(),
+            mocker.call("How many instances do you want to use? (1-4, or 'all', blank to cancel) "),
+            mocker.call().strip()
+        ]
 
         assert len(subject.INSTANCES) == 2

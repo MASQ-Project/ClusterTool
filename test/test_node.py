@@ -43,8 +43,8 @@ class TestNode:
 
         self.mock_node_commands.delete_logs.assert_called_with()
         self.mock_node_commands.cat_logs.return_value.expect.assert_called_with(['.*SubstratumNode local descriptor: (.+)[\t\r\n\v\f ]', pexpect.EOF], timeout=None)
-        self.mock_node_commands.cat_logs.return_value.expect.match.group.called_with(1)
-        self.mock_node_commands.cat_logs.return_value.expect.match.group.return_value.split.called_with('\r')
+        self.mock_node_commands.cat_logs.return_value.match.group.assert_called_with(1)
+        self.mock_node_commands.cat_logs.return_value.match.group.return_value.split.assert_called_with('\r')
         self.mock_node_commands.start.assert_called_with({
             'dns_servers': "--dns_servers 1.1.1.1",
             'log_level': "--log_level trace",
