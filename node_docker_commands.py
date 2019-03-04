@@ -1,6 +1,7 @@
 # Copyright (c) 2019, Substratum LLC (https://substratum.net) and/or its affiliates. All rights reserved.
 from __future__ import print_function
 from node_commands import *
+from node import Node
 from executor import Executor, TerminalExecutor
 import os
 import pexpect
@@ -65,7 +66,9 @@ class NodeDockerCommands(NodeCommands):
             "--dns_servers", node_args["dns_servers"].split(' ')[1],
             "--log_level", node_args["log_level"].split(' ')[1],
             "--port_count", node_args["port_count"].split(' ')[1],
+            "--home", node_args["home"].split(' ')[1],
             "--ip", self.get_ip(),
+            "--wallet_address", Node.earning_wallet(self.get_ip()),
         ]
         additional_args = node_args["additional_args"].split(' ')
         command.extend(additional_args)

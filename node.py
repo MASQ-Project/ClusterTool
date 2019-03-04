@@ -47,7 +47,9 @@ class Node:
             'dns_servers': "--dns_servers 1.1.1.1",
             'log_level': "--log_level trace",
             'port_count': "--port_count 1",
+            'home': "--home /tmp",
             'ip': "--ip %s" % ip,
+            'wallet_address': "--wallet_address %s" % self.earning_wallet(ip),
             'additional_args': arg_str,
         }
         self.node_commands.start(node_args)
@@ -74,6 +76,22 @@ class Node:
 
     def gossip_produced(self):
         self._handle_dot_graph_interaction('Created Gossip', 'sent', 'Gossip messages sent')
+
+    @staticmethod
+    def earning_wallet(ip):
+        fragment = Node._wallet_fragment(ip)
+        return "0x%s%s%s%sEEEEEEEE" % (fragment, fragment, fragment, fragment)  # EEEs for "earning"
+
+    @staticmethod
+    def consuming_wallet(ip):
+        fragment = Node._wallet_fragment(ip)
+        return "0x%s%s%s%sCCCCCCCC" % (fragment, fragment, fragment, fragment)  # CCCs for "consuming"
+
+    @staticmethod
+    def _wallet_fragment(ip):
+        match = re.search(r"(\d+)\.(\d+)\.(\d+)\.(\d+)", ip)
+        octets = [int(match.group(1)), int(match.group(2)), int(match.group(3)), int(match.group(4))]
+        return "%02X%02X%02X%02X" % (octets[0], octets[1], octets[2], octets[3])
 
     def _handle_dot_graph_interaction(self, log_pattern, filename, prompt_message):
         p = self.node_commands.cat_logs()
@@ -129,4 +147,3 @@ class Node:
         descriptor = p.match.group(1).split('\r')[0].strip()
         print("\t\tdone.")
         return descriptor
-

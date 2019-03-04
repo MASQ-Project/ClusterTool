@@ -114,7 +114,9 @@ Once the previous log is removed, SubstratumNode is started with the following p
 - `--dns_servers 1.1.1.1`
 - `--log_level trace`
 - `--port_count 1`
+- `--home /tmp`
 - `--ip <ip addr of the instance>`
+- `--wallet_address <fake address calculated from ip address>`
 - either `--type bootstrap` or `--neighbor <bootstrap descriptor>`
 
 Once SubstratumNode is started, `start` waits for the node descriptor to appear in the logs before completing.

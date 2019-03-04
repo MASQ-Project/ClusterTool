@@ -30,7 +30,9 @@ class TestNodeSshCommands:
             'dns_servers': 'standard',
             'log_level': 'debug',
             'port_count': '1',
+            'home': '/tmp',
             'ip': '1.2.3.4',
+            'wallet_address': '0xF00DFACE',
             'additional_args': 'hi'
         }
         self.mock_executor.return_value.execute_sync.return_value = 'started'
