@@ -27,7 +27,7 @@ class TestNodeDockerCommands:
             'dns_servers': '--dns_servers 1.1.1.1',
             'log_level': '--log_level trace',
             'port_count': '--port_count 1',
-            'home': '--home /tmp',
+            'data_directory': '--data_directory /tmp',
             'additional_args': '--node_type bootstrap'
         }
         self.mock_executor.execute_sync.return_value = 'success'
@@ -55,7 +55,7 @@ class TestNodeDockerCommands:
             '--dns_servers', '1.1.1.1',
             '--log_level', 'trace',
             '--port_count', '1',
-            '--home', '/tmp',
+            '--data_directory', '/tmp',
             '--ip', '1.2.3.4',
             '--wallet_address', '0x01020304010203040102030401020304EEEEEEEE',
             '--node_type', 'bootstrap'
@@ -70,7 +70,7 @@ class TestNodeDockerCommands:
             'dns_servers': '--dns_servers 1.1.1.2',
             'log_level': '--log_level debug',
             'port_count': '--port_count 2',
-            'home': '--home /tmp',
+            'data_directory': '--data_directory /tmp',
             'additional_args': '--neighbor howdy'
         }
         self.mock_executor.execute_sync.return_value = 'success'
@@ -102,7 +102,7 @@ class TestNodeDockerCommands:
                 '--dns_servers', '1.1.1.2',
                 '--log_level', 'debug',
                 '--port_count', '2',
-                '--home', '/tmp',
+                '--data_directory', '/tmp',
                 '--ip', '1.2.3.4',
                 '--wallet_address', '0x01020304010203040102030401020304EEEEEEEE',
                 '--neighbor', 'howdy'

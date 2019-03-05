@@ -66,7 +66,7 @@ class NodeDockerCommands(NodeCommands):
             "--dns_servers", node_args["dns_servers"].split(' ')[1],
             "--log_level", node_args["log_level"].split(' ')[1],
             "--port_count", node_args["port_count"].split(' ')[1],
-            "--home", node_args["home"].split(' ')[1],
+            "--data_directory", node_args["data_directory"].split(' ')[1],
             "--ip", self.get_ip(),
             "--wallet_address", Node.earning_wallet(self.get_ip()),
         ]
