@@ -122,6 +122,14 @@ Once the previous log is removed, SubstratumNode is started with the following p
 Once SubstratumNode is started, `start` waits for the node descriptor to appear in the logs before completing.
 This is particularly important for the `bootstrap` node, since all the other nodes will require its descriptor to start.
 
+### daisy
+
+_Implemented in `daisy.py`_
+
+`daisy` is an InputCommand that starts the specified number of initialized nodes in sequence, one after another.
+It begins with the bootstrap node and each new node will use the previous node descriptor for its `--neighbor`
+parameter.
+
 ### tail
 
 _Implemented in `instance.py`_
