@@ -6,8 +6,9 @@ BINARIES = [
 
 
 class Instance:
-    def __init__(self, name, instance_api):
-        self.name = name
+    def __init__(self, node_id, instance_api):
+        self.name = make_name(node_id)
+        self.node_id = node_id
         self.instance_api = instance_api
         self.dns = self.instance_api.dns
         self.traffic = self.instance_api.traffic
@@ -73,3 +74,10 @@ class Instance:
         self.dns.subvert()
         self.traffic.wget()
 
+
+def make_name(node_id):
+    int_node_id = int(node_id)
+    if int_node_id == 0:
+        return 'bootstrap'
+    else:
+        return "node-%s" % int_node_id

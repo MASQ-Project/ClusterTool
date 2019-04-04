@@ -50,24 +50,19 @@ def _automated():
 
     platform_idx = 0
     for idx in range(instance_count):
-        name = _determine_name()
+        node_id = _determine_id()
         api = instance_lists[platform_idx].pop(0)
         if len(instance_lists[platform_idx]) == 0:
             platform_idx = platform_idx + 1
 
         # TODO what if the instance is already running? maybe already has SubstratumNode running on it? (proposed `status` command can help with this)
-        INSTANCES[name] = Instance(name, api)
-        print("Configured %s on %s (%s)" % (name, api.name, api.__class__))
+        instance = Instance(node_id, api)
+        INSTANCES[instance.name] = instance
+        print("Configured %s on %s (%s)" % (instance.name, api.name, api.__class__))
 
 
-def _determine_name():
-    already_configured_count = len(INSTANCES)
-    if already_configured_count == 0:
-        return 'bootstrap'
-    else:
-        # TODO check if node-# is already in the list.
-        # either find the gap and fill it, or find the largest configured number and add 1
-        return 'node-%i' % already_configured_count
+def _determine_id():
+    return len(INSTANCES)
 
 
 def _prompt_for_platform_group():

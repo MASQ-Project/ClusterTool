@@ -6,10 +6,10 @@ class TestInstance:
 
     @pytest.fixture
     def subject(self, mocker):
-        self.subject = Instance('booga', mocker.Mock(autospec=True))
+        self.subject = Instance(1, mocker.Mock(autospec=True))
 
     def test_init(self, subject):
-        assert self.subject.name == 'booga'
+        assert self.subject.name == 'node-1'
 
     def test_start(self, subject):
         result = self.subject.start()
