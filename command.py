@@ -18,7 +18,7 @@ class Command:
         return self.run()
 
 
-class HelpCommand:
+class InputCommand:
     def __init__(self, name, fn, info):
         self.name = name
         self.run = fn

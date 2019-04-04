@@ -1,6 +1,6 @@
 # Copyright (c) 2019, Substratum LLC (https://substratum.net) and/or its affiliates. All rights reserved.
 from __future__ import print_function
-from command import HelpCommand
+from command import InputCommand
 
 
 def name():
@@ -8,7 +8,7 @@ def name():
 
 
 def command():
-    return HelpCommand('help', _prompt_for_usage, "shows usage information for specified command")
+    return InputCommand('help', _prompt_for_usage, "shows usage information for specified command")
 
 
 def _prompt_for_usage(the_input):
