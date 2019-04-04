@@ -14,7 +14,7 @@ def command():
 
 def _start_daisy_chain(count):
     try:
-        iterations_left = int(count) + 1
+        iterations_left = int(count)
     except ValueError:
         print("FAILED TO START daisy chain: %s is not an integer" % count)
         return
@@ -33,4 +33,4 @@ def _start_daisy_chain(count):
         else:
             next_descriptor = instance.start_node(next_descriptor)
             print('started %s %s' % (node_name, next_descriptor))
-        iterations_left -= 1
+            iterations_left -= 1
