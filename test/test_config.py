@@ -41,6 +41,8 @@ def test_commands():
     assert COMMANDS['nfo'].info == "nukes from orbit - it's the only way to be sure. Restarts"
     assert COMMANDS['daisy'].name == "daisy"
     assert COMMANDS['daisy'].info == "Starts the specified number of nodes in a daisy chain"
+    assert COMMANDS['cluster'].name == "cluster"
+    assert COMMANDS['cluster'].info == "Starts the specified number of nodes all with the same neighbor"
 
 def test_inline_functions(mocker):
     mock_instance = mocker.Mock()

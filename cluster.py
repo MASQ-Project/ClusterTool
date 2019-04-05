@@ -13,16 +13,28 @@ def command():
 
 
 def _start_cluster(count):
-    iterations_left = int(count)
-    print(INSTANCES)
+    try:
+        iterations_left = int(count)
+    except ValueError:
+        print("FAILED TO START cluster: %s is not an integer" % count)
+        return
     sorted_instances = sorted(INSTANCES.iteritems(), key=lambda (key, value): value.node_id)
-    print(sorted_instances)
-    for instance_name, instance in sorted_instances:
+    available_instances = filter(lambda (key, value): value.node.descriptor == '', sorted_instances)
+    cluster_descriptor = _find_descriptor_by_max_key_of_running_instances(sorted_instances)
+    for instance_name, instance in available_instances:
         if iterations_left == 0:
             break
 
-        if instance_name == 'bootstrap':
-            instance.start_node()
+        if cluster_descriptor == '':
+            cluster_descriptor = instance.start_node()
         else:
-            instance.start_node('descriptor')
+            instance.start_node(cluster_descriptor)
             iterations_left -= 1
+
+
+def _find_descriptor_by_max_key_of_running_instances(sorted_instances):
+    running_instances = filter(lambda (key, value): value.node.descriptor != '', sorted_instances)
+    if len(running_instances) == 0:
+        return ''
+    return running_instances[-1][1].node.descriptor
+
