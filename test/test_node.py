@@ -180,7 +180,7 @@ class TestNode:
 
     def test_display_neighborhood(self, node_commands, printing, graphviz, mocker):
         subject = Node('booga', self.mock_node_commands)
-        self.mock_node_commands.cat_logs.return_value.before = 'Database after accepting Gossip: digraph db {...; }'
+        self.mock_node_commands.cat_logs.return_value.before = 'Current database: digraph db {...; }'
         mock_input = mocker.patch('__builtin__.raw_input')
         mock_input.side_effect = ['1', '']
 
@@ -262,7 +262,7 @@ class TestNode:
 
     def test_display_neighborhood_when_invalid_input(self, node_commands, printing, graphviz, mocker):
         subject = Node('booga', self.mock_node_commands)
-        self.mock_node_commands.cat_logs.return_value.before = 'Database after accepting Gossip: digraph db {...; }'
+        self.mock_node_commands.cat_logs.return_value.before = 'Current database: digraph db {...; }'
         mock_input = mocker.patch('__builtin__.raw_input')
         mock_input.side_effect = ['2', 'not_a_number', '']
 

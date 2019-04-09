@@ -122,6 +122,39 @@ Once the previous log is removed, SubstratumNode is started with the following p
 Once SubstratumNode is started, `start` waits for the node descriptor to appear in the logs before completing.
 This is particularly important for the `bootstrap` node, since all the other nodes will require its descriptor to start.
 
+### daisy
+
+_Implemented in `daisy.py`_
+
+`daisy` is an InputCommand that starts the specified number of initialized nodes in sequence, one after another.
+It begins with the bootstrap node and each new node will use the previous node descriptor for its `--neighbor`
+parameter.
+
+```ascii-art
+B-1-2-3-4-5-6
+```
+
+### cluster
+
+_Implemented in `cluster.py`_
+
+`cluster` is an InputCommand that starts the specified number of initialized nodes in a cluster around an already
+started node.  If no node is started it will start the bootstrap node and cluster around it. Run this command multiple
+times to create multiple clusters, it will start the next cluster from the last node that was started.
+
+For example: With docker initialize 7 nodes. `cluster 3` starts the bootstrap node and three nodes clustered around
+bootstrap. Running `cluster 3` a second time with start 3 more nodes clustered around node-3.
+
+```ascii-art
+  2
+  |
+  B-1
+  |
+6-3-4
+  |
+  5
+```
+
 ### tail
 
 _Implemented in `instance.py`_

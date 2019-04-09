@@ -1,10 +1,10 @@
 # Copyright (c) 2019, Substratum LLC (https://substratum.net) and/or its affiliates. All rights reserved.
 from command import SelectCommand
-import finish, info, init, nfo, update, kill, start, help
+import finish, info, init, nfo, update, kill, start, help, daisy, cluster
 
 COMMANDS = {
-    init.name(): init.command(), # setup
-    info.name(): info.command(), # always "all"
+    init.name(): init.command(),  # setup
+    info.name(): info.command(),  # always "all"
     update.name(): update.command(),
     start.name(): start.command(),
     'tail': SelectCommand('tail', lambda instance: instance.tail(), "opens terminal(s) to tail -f SubstratumNode logs on"),
@@ -21,7 +21,9 @@ COMMANDS = {
     'shell': SelectCommand('shell', lambda instance: instance.shell(), "opens shell(s) on node instance in terminal window"),
     kill.name(): kill.command(),
     nfo.name(): nfo.command(),
-    help.name(): help.command()
+    help.name(): help.command(),
+    daisy.name(): daisy.command(),
+    cluster.name(): cluster.command()
 
     # TODO status command (finds out which instances are running (checks all platforms), for running instances, determines if node is running on them, if they are subverted, etc)
     # it should not load this state into INSTANCES automatically (multiple pairs could be using different cloud instances, so this should enable coordination)

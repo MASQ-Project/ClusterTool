@@ -69,7 +69,7 @@ class Node:
         print("\tdone")
 
     def display_neighborhood(self):
-        self._handle_dot_graph_interaction('Database after accepting Gossip', 'neighborhood', 'Neighborhood DB changes')
+        self._handle_dot_graph_interaction('Current database', 'neighborhood', 'Neighborhood DB changes')
 
     def gossip_received(self):
         self._handle_dot_graph_interaction('Received Gossip', 'received', 'Gossip messages received')
