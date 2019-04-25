@@ -240,7 +240,7 @@ class TestNode:
 
     def test_gossip_produced(self, node_commands, printing, graphviz, mocker):
         subject = Node('booga', self.mock_node_commands)
-        self.mock_node_commands.cat_logs.return_value.before = 'Created Gossip: digraph db {...; }'
+        self.mock_node_commands.cat_logs.return_value.before = 'Sent Gossip: digraph db {...; }'
         mock_input = mocker.patch('__builtin__.raw_input')
         mock_input.side_effect = ['1', '']
 
