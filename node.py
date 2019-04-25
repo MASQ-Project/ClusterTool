@@ -75,7 +75,7 @@ class Node:
         self._handle_dot_graph_interaction('Received Gossip', 'received', 'Gossip messages received')
 
     def gossip_produced(self):
-        self._handle_dot_graph_interaction('Created Gossip', 'sent', 'Gossip messages sent')
+        self._handle_dot_graph_interaction('Sent Gossip', 'sent', 'Gossip messages sent')
 
     @staticmethod
     def earning_wallet(ip):
