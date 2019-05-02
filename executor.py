@@ -4,6 +4,7 @@ import pexpect
 import subprocess as sp
 import sys
 import os
+import shutil
 
 
 class Executor:
@@ -38,8 +39,16 @@ def _scriptify(command):
     os.chmod(filename, 0755)
     return filename
 
+def _shell_wrap(command):
+    source = './tnt_wrapper.sh'
+    destination = '/tmp/tnt_wrapper.sh'
+    shutil.copyfile(source, destination)
+    os.chmod(destination, 0755)
+    wrapped_command = "\"{0}\" {1}".format(destination, command)
+    return wrapped_command
+
 
 _NEW_TERMINAL_BY_PLATFORM = {
-    'darwin': lambda command: ['open', '-n', '-a', 'iTerm', '--args'] + [_scriptify(command)],
-    'linux2': lambda command: ['gnome-terminal', '--geometry', '180x24+0+0', '-e'] + [command],
+    'darwin': lambda command: ['open', '-n', '-a', 'iTerm', '--args'] + [_scriptify(_shell_wrap(command))],
+    'linux2': lambda command: ['gnome-terminal', '--geometry', '180x24+0+0', '-e'] + [_scriptify(_shell_wrap(command))],
 }

@@ -48,6 +48,7 @@ class TestNodeDockerCommands:
             '--ip', '1.2.3.4',
             '--dns', '127.0.0.1',
             '--name', 'bacon',
+            '--hostname', 'bacon',
             '--net', 'test_net',
             '--volume', 'cwd/binaries/:/node_root/node',
             'test_net_tools',
@@ -95,6 +96,7 @@ class TestNodeDockerCommands:
                 '--ip', '1.2.3.4',
                 '--dns', '127.0.0.1',
                 '--name', 'bacon',
+                '--hostname', 'bacon',
                 '--net', 'test_net',
                 '--volume', 'cwd/binaries/:/node_root/node',
                 'test_net_tools',
@@ -157,21 +159,21 @@ class TestNodeDockerCommands:
         assert result == 0
 
     def test_tail(self, mocks):
-        subject = NodeDockerCommands('bacon', None)
+        subject = NodeDockerCommands('bacon', lambda: '1.2.3.4')
         self.mock_terminal_executor.return_value.execute_in_new_terminal.return_value = 'tailing'
 
         result = subject.tail()
 
-        self.mock_terminal_executor.return_value.execute_in_new_terminal.assert_called_with('docker logs -f bacon')
+        self.mock_terminal_executor.return_value.execute_in_new_terminal.assert_called_with('\"bacon(1.2.3.4)\" docker logs -f bacon')
 
         assert result == 'tailing'
 
     def test_shell(self, mocks):
-        subject = NodeDockerCommands('bacon', None)
+        subject = NodeDockerCommands('bacon', lambda: '1.2.3.4')
         self.mock_terminal_executor.return_value.execute_in_new_terminal.return_value = 'shelling'
 
         result = subject.shell()
 
-        self.mock_terminal_executor.return_value.execute_in_new_terminal.assert_called_with('docker exec -it bacon bash')
+        self.mock_terminal_executor.return_value.execute_in_new_terminal.assert_called_with('\"bacon(1.2.3.4)\" docker exec -it bacon bash')
 
         assert result == 'shelling'

@@ -10,4 +10,4 @@ RUN apt-get install -y sqlite3
 ENV SUDO_UID 1000
 ENV SUDO_GID 1000
 
-COPY metrics.sh metrics.sh ./
+COPY metrics.sh ./

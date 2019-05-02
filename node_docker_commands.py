@@ -40,11 +40,11 @@ class NodeDockerCommands(NodeCommands):
         return 0
 
     def tail(self):
-        command = "docker logs -f %s" % self.name
+        command = "\"{0}({1})\" docker logs -f {0}".format(self.name, self.get_ip(), self.name)
         return self.terminal_executor.execute_in_new_terminal(command)
 
     def shell(self):
-        command = "docker exec -it %s bash" % self.name
+        command = "\"{0}({1})\" docker exec -it {0} bash".format(self.name, self.get_ip())
         return self.terminal_executor.execute_in_new_terminal(command)
 
     def delete_logs(self):
@@ -59,6 +59,7 @@ class NodeDockerCommands(NodeCommands):
             "--ip", self.get_ip(),
             "--dns", "127.0.0.1",
             "--name", self.name,
+	    "--hostname", self.name,
             "--net", "test_net",
             "--volume", volume,
             "test_net_tools",
