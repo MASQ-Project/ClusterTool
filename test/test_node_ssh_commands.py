@@ -29,7 +29,6 @@ class TestNodeSshCommands:
         node_args = {
             'dns_servers': 'standard',
             'log_level': 'debug',
-            'port_count': '1',
             'data_directory': '/tmp',
             'ip': '1.2.3.4',
             'wallet_address': '0xF00DFACE',

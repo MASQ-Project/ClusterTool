@@ -46,7 +46,6 @@ class Node:
         node_args = {
             'dns_servers': "--dns_servers 1.1.1.1",
             'log_level': "--log_level trace",
-            'port_count': "--port_count 1",
             'data_directory': "--data_directory /tmp",
             'ip': "--ip %s" % ip,
             'wallet_address': "--wallet_address %s" % self.earning_wallet(ip),

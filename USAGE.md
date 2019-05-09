@@ -113,7 +113,6 @@ This is to ensure that the log will only contain the current node descriptor.
 Once the previous log is removed, SubstratumNode is started with the following parameters:
 - `--dns_servers 1.1.1.1`
 - `--log_level trace`
-- `--port_count 1`
 - `--data_directory /tmp`
 - `--ip <ip addr of the instance>`
 - `--wallet_address <fake address calculated from ip address>`

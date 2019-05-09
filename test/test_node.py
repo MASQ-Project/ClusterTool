@@ -48,7 +48,6 @@ class TestNode:
         self.mock_node_commands.start.assert_called_with({
             'dns_servers': "--dns_servers 1.1.1.1",
             'log_level': "--log_level trace",
-            'port_count': "--port_count 1",
             'data_directory': "--data_directory /tmp",
             'ip': "--ip 1.2.3.4",
             'wallet_address': "--wallet_address 0x01020304010203040102030401020304EEEEEEEE",
@@ -79,7 +78,6 @@ class TestNode:
         self.mock_node_commands.start.assert_called_with({
             'dns_servers': "--dns_servers 1.1.1.1",
             'log_level': "--log_level trace",
-            'port_count': "--port_count 1",
             'data_directory': "--data_directory /tmp",
             'ip': "--ip 1.2.3.4",
             'wallet_address': "--wallet_address 0x01020304010203040102030401020304EEEEEEEE",
