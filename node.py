@@ -21,7 +21,7 @@ class Node:
             print("\tnode running: %s" % self.descriptor)
         else:
             print("\tstarting node %s..." % self.name)
-            self._start_node_with(ip, "--neighbor %s" % bootstrap_info)
+            self._start_node_with(ip, "--neighbors %s" % bootstrap_info)
             print("\tnode running: %s" % self.descriptor)
         return self.descriptor
 

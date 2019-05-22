@@ -116,7 +116,7 @@ Once the previous log is removed, SubstratumNode is started with the following p
 - `--data_directory /tmp`
 - `--ip <ip addr of the instance>`
 - `--wallet_address <fake address calculated from ip address>`
-- either `--type bootstrap` or `--neighbor <bootstrap descriptor>`
+- either `--type bootstrap` or `--neighbors <bootstrap descriptor>`
 
 Once SubstratumNode is started, `start` waits for the node descriptor to appear in the logs before completing.
 This is particularly important for the `bootstrap` node, since all the other nodes will require its descriptor to start.
@@ -126,7 +126,7 @@ This is particularly important for the `bootstrap` node, since all the other nod
 _Implemented in `daisy.py`_
 
 `daisy` is an InputCommand that starts the specified number of initialized nodes in sequence, one after another.
-It begins with the bootstrap node and each new node will use the previous node descriptor for its `--neighbor`
+It begins with the bootstrap node and each new node will use the previous node descriptor for its `--neighbors`
 parameter.
 
 ```ascii-art

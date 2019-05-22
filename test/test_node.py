@@ -81,7 +81,7 @@ class TestNode:
             'data_directory': "--data_directory /tmp",
             'ip': "--ip 1.2.3.4",
             'wallet_address': "--wallet_address 0x01020304010203040102030401020304EEEEEEEE",
-            'additional_args': "--neighbor neighbor_descriptor",
+            'additional_args': "--neighbors neighbor_descriptor",
         })
         assert real_descriptor == 'descriptor'
 
