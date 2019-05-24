@@ -70,8 +70,9 @@ class NodeDockerCommands(NodeCommands):
             "--ip", self.get_ip(),
             "--wallet_address", Node.earning_wallet(self.get_ip()),
         ]
-        additional_args = node_args["additional_args"].split(' ')
-        command.extend(additional_args)
+        if "additional_args" in node_args:
+            additional_args = node_args["additional_args"].split(' ')
+            command.extend(additional_args)
         return self.executor.execute_sync(command)
 
     def _docker_destroy(self):

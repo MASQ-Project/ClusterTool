@@ -42,8 +42,7 @@ class TestStart:
 
         assert self.mock_node0.start_node.call_count == 0
 
-    # @TODO #SC-815
-    def test_command_when_not_trying_to_start_node_on_bootstrap_and_node_is_running_on_bootstrap(self, instances, mocker):
+    def test_command_when_not_trying_to_start_node_on_node0_and_node_is_running_on_node0(self, instances, mocker):
         mock_input = mocker.patch('__builtin__.raw_input')
         mock_input.return_value.strip.return_value = 'other'
         self.mock_node0.node.descriptor = 'descriptor'
@@ -53,8 +52,7 @@ class TestStart:
 
         self.mock_other_instance.start_node.assert_called_with('descriptor')
 
-    # @TODO #SC-815
-    def test_command_when_trying_to_start_node_on_bootstrap_and_node_is_not_running_on_bootstrap(self, instances, mocker):
+    def test_command_when_trying_to_start_node_on_node0_and_node_is_not_running_on_node0(self, instances, mocker):
         mock_input = mocker.patch('__builtin__.raw_input')
         mock_input.return_value.strip.return_value = 'node-0'
         self.mock_node0.node.descriptor = ''
