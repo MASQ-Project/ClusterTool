@@ -24,10 +24,10 @@ def _start_daisy_chain(count):
         if iterations_left == 0:
             break
 
-        if node_name == 'bootstrap':
+        if node_name == 'node-0':
             if instance.node.descriptor == '':
                 next_descriptor = instance.start_node()
-                print('started bootstrap node %s' % next_descriptor)
+                print('started node %s' % next_descriptor)
             else:
                 next_descriptor = instance.node.descriptor
         else:

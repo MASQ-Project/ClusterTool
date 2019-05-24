@@ -26,10 +26,10 @@ If `all` is specified, or if all instances are manually specified, a SelectComma
 instances once it completes.
 
 Once you get comfortable using TNT and are familiar with which commands are SelectCommands, you can specify
-instances inline with the command to avoid multiple prompts (e.g. `start bootstrap`).
+instances inline with the command to avoid multiple prompts (e.g. `start node-0`).
 
 SelectCommands sort the instance names provided to it before running, so if `all` is specified, for example,
-`bootstrap` will be run first, followed by `node-1`, then `node-2`, etc.
+`node-0` will be run first, followed by `node-1`, then `node-2`, etc.
 
 ### Command
 Regular Commands are less common in TNT; they generally do not operate on the INSTANCES, or, if they do,
@@ -47,7 +47,7 @@ it uses for running nodes.
 Then, once INSTANCES is configured, it "starts" the instances -- calls into the instance platform to ensure that each
 instance is running so that TNT can interact with it later on.
 
-`init` automatically generates local names for the instances. It names the first one `bootstrap`, the next one `node-1`,
+`init` automatically generates local names for the instances. It names the first one `node-0`, the next one `node-1`,
 then `node-2`, etc.
 
 **WARNING:** The name generator currently does **not** gracefully handle taking down a single node and bringing it back up.
@@ -98,14 +98,14 @@ _Implemented in `start.py`_
 
 `start` is a SelectCommand that starts SubstratumNode on the instance(s) you specify.
 
-The `bootstrap` node must always be started first.
-If you try to start any other node before `bootstrap`, `start` will complain.
+The `node-0` node must always be started first.
+If you try to start any other node before `node-0`, `start` will complain.
 
-`start` will also complain if you try to start `bootstrap` more than once.
+`start` will also complain if you try to start `node-0` more than once.
 However, it does not prevent you from starting any other node more than once.
 
 If nodes are started in an acceptable order, the `start` command will call the relevant `instance.py` function:
-`start_bootstrap_node` or `start_node` (sending in the `bootstrap` node descriptor).
+`start_bootstrap_node` or `start_node` (sending in the `node-0` node descriptor).
 
 The first thing `start` does is remove any existing `SubstratumNode.log` file.
 This is to ensure that the log will only contain the current node descriptor.
@@ -116,17 +116,17 @@ Once the previous log is removed, SubstratumNode is started with the following p
 - `--data_directory /tmp`
 - `--ip <ip addr of the instance>`
 - `--wallet_address <fake address calculated from ip address>`
-- `--neighbors <bootstrap descriptor>`
+- `--neighbors <neighbor descriptor>`
 
 Once SubstratumNode is started, `start` waits for the node descriptor to appear in the logs before completing.
-This is particularly important for the `bootstrap` node, since all the other nodes will require its descriptor to start.
+This is particularly important for the `node-0` node, since all the other nodes will require its descriptor to start.
 
 ### daisy
 
 _Implemented in `daisy.py`_
 
 `daisy` is an InputCommand that starts the specified number of initialized nodes in sequence, one after another.
-It begins with the bootstrap node and each new node will use the previous node descriptor for its `--neighbors`
+It begins with the first node and each new node will use the previous node descriptor for its `--neighbors`
 parameter.
 
 ```ascii-art
@@ -138,11 +138,11 @@ B-1-2-3-4-5-6
 _Implemented in `cluster.py`_
 
 `cluster` is an InputCommand that starts the specified number of initialized nodes in a cluster around an already
-started node.  If no node is started it will start the bootstrap node and cluster around it. Run this command multiple
+started node.  If no node is started it will start the first node and cluster around it. Run this command multiple
 times to create multiple clusters, it will start the next cluster from the last node that was started.
 
-For example: With docker initialize 7 nodes. `cluster 3` starts the bootstrap node and three nodes clustered around
-bootstrap. Running `cluster 3` a second time with start 3 more nodes clustered around node-3.
+For example: With docker initialize 7 nodes. `cluster 3` starts the first node and three nodes clustered around
+it. Running `cluster 3` a second time with start 3 more nodes clustered around node-3.
 
 ```ascii-art
   2
