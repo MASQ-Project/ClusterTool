@@ -24,8 +24,6 @@ class TrafficHandler():
 
     def curl(self, curl_what=CURL_SITE):
         # TODO prompt for the url, default if none given
-        if self.name == 'bootstrap':
-            return
         # TODO move all user interaction stuff out into command files.
         curl_count = -1
         while curl_count < 0:
@@ -53,9 +51,6 @@ class TrafficHandler():
         print("\tdone.")
 
     def wget(self):
-        if self.name == 'bootstrap':
-            return
-
         print("\tstarting traffic on %s..." % self.name)
         for site in WGET_SITES:
             print("%s sending wget %s" % (time.ctime(), site))
@@ -64,9 +59,6 @@ class TrafficHandler():
         print("\tdone.")
 
     def stop(self):
-        if self.name == 'bootstrap':
-            return
-
         for traffic_handle in self.traffic_handles:
             traffic_handle.cleanup(self.traffic_commands.cleanup)
 
@@ -74,9 +66,6 @@ class TrafficHandler():
         print("\tdone.")
 
     def verify(self):
-        if self.name == 'bootstrap':
-            return
-
         elif len(self.traffic_handles) == 0:
             print("\tyou didn't request traffic on %s" % self.name)
             return

@@ -16,8 +16,8 @@ class Node:
         if self.descriptor != "":
             print("it looks like node is already running on %s" % self.name)
         elif bootstrap_info == "":
-            print("\tstarting node %s as bootstrap..." % self.name)
-            self._start_node_with(ip, "--node_type bootstrap")
+            print("\tstarting node %s..." % self.name)
+            self._start_node_with(ip)
             print("\tnode running: %s" % self.descriptor)
         else:
             print("\tstarting node %s..." % self.name)
