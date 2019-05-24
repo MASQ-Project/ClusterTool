@@ -11,10 +11,10 @@ class TestCluster:
 
     @pytest.fixture
     def instances(self, mocker):
-        self.mock_bootstrap_instance = mocker.Mock(autospec=True)
-        self.mock_bootstrap_instance.name = 'bootstrap'
-        self.mock_bootstrap_instance.node_id = 0
-        self.mock_bootstrap_instance.node.descriptor = ''
+        self.mock_node0 = mocker.Mock(autospec=True)
+        self.mock_node0.name = 'node-0'
+        self.mock_node0.node_id = 0
+        self.mock_node0.node.descriptor = ''
         self.mock_node1 = make_mock_instance(1, mocker)
         self.mock_node2 = make_mock_instance(2, mocker)
         self.mock_node3 = make_mock_instance(3, mocker)
@@ -24,7 +24,7 @@ class TestCluster:
         self.mock_node7 = make_mock_instance(7, mocker)
 
         instance_dict = {
-            'bootstrap': self.mock_bootstrap_instance,
+            'node-0': self.mock_node0,
             'node-1': self.mock_node1,
             'node-2': self.mock_node2,
             'node-3': self.mock_node3,
@@ -44,56 +44,56 @@ class TestCluster:
         assert real_command.name == 'cluster'
         assert real_command.info == 'Starts the specified number of nodes all with the same neighbor'
 
-    def test_command_for_three_nodes_and_bootstrap_is_not_running(self, instances):
-        self.mock_bootstrap_instance.start_node.return_value = 'descriptor'
+    def test_command_for_three_nodes_and_node0_is_not_running(self, instances):
+        self.mock_node0.start_node.return_value = 'descriptor'
 
         real_command = subject.command()
 
         real_command.run_for('3')
 
-        self.mock_bootstrap_instance.start_node.assert_called_with()
+        self.mock_node0.start_node.assert_called_with()
         self.mock_node1.start_node.assert_called_with('descriptor')
         self.mock_node2.start_node.assert_called_with('descriptor')
         self.mock_node3.start_node.assert_called_with('descriptor')
         self.mock_node4.start_node.assert_not_called()
 
-    def test_command_for_three_nodes_and_bootstrap_is_already_running(self, instances):
-        self.mock_bootstrap_instance.node.descriptor = 'bootstrap-descriptor'
+    def test_command_for_three_nodes_and_node0_is_already_running(self, instances):
+        self.mock_node0.node.descriptor = 'node-0-descriptor'
 
         real_command = subject.command()
 
         real_command.run_for('3')
 
-        self.mock_bootstrap_instance.start_node.assert_not_called()
-        self.mock_node1.start_node.assert_called_with('bootstrap-descriptor')
-        self.mock_node2.start_node.assert_called_with('bootstrap-descriptor')
-        self.mock_node3.start_node.assert_called_with('bootstrap-descriptor')
+        self.mock_node0.start_node.assert_not_called()
+        self.mock_node1.start_node.assert_called_with('node-0-descriptor')
+        self.mock_node2.start_node.assert_called_with('node-0-descriptor')
+        self.mock_node3.start_node.assert_called_with('node-0-descriptor')
         self.mock_node4.start_node.assert_not_called()
 
-    def test_command_for_two_clusters_and_bootstrap_is_not_running(self, instances):
-        self.mock_bootstrap_instance.start_node.return_value = 'mock-descriptor'
+    def test_command_for_two_clusters_and_node0_is_not_running(self, instances):
+        self.mock_node0.start_node.return_value = 'mock-descriptor'
         self.mock_node3.start_node.return_value = 'mock-3-descriptor'
 
         real_command = subject.command()
 
         real_command.run_for('3')
 
-        self.mock_bootstrap_instance.start_node.assert_called_with()
+        self.mock_node0.start_node.assert_called_with()
         self.mock_node1.start_node.assert_called_with('mock-descriptor')
         self.mock_node2.start_node.assert_called_with('mock-descriptor')
         self.mock_node3.start_node.assert_called_with('mock-descriptor')
         self.mock_node4.start_node.assert_not_called()
 
-        self.mock_bootstrap_instance.reset_mock()
+        self.mock_node0.reset_mock()
         self.mock_node3.reset_mock()
-        self.mock_bootstrap_instance.node.descriptor = 'mock-descriptor'
+        self.mock_node0.node.descriptor = 'mock-descriptor'
         set_descriptor(self.mock_node1, 'mock-1-descriptor')
         set_descriptor(self.mock_node2, 'mock-2-descriptor')
         set_descriptor(self.mock_node3, 'mock-3-descriptor')
 
         real_command.run_for('3')
 
-        self.mock_bootstrap_instance.start_node.assert_not_called()
+        self.mock_node0.start_node.assert_not_called()
         self.mock_node3.start_node.assert_not_called()
         self.mock_node4.start_node.assert_called_with('mock-3-descriptor')
         self.mock_node5.start_node.assert_called_with('mock-3-descriptor')

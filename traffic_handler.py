@@ -66,7 +66,7 @@ class TrafficHandler():
         print("\tdone.")
 
     def verify(self):
-        elif len(self.traffic_handles) == 0:
+        if len(self.traffic_handles) == 0:
             print("\tyou didn't request traffic on %s" % self.name)
             return
 

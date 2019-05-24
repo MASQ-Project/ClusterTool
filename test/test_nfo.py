@@ -9,8 +9,8 @@ class TestNfo:
     @pytest.fixture
     def instance(self, mocker):
         self.mock_instance = mocker.Mock(autospec=True)
-        self.mock_instance.name = 'bootstrap'
-        instance_dict = {'bootstrap': self.mock_instance}
+        self.mock_instance.name = 'node-0'
+        instance_dict = {'node-0': self.mock_instance}
         mocker.patch.object(command, 'INSTANCES', instance_dict)
 
     def test_name(self):
@@ -25,6 +25,6 @@ class TestNfo:
     def test_command(self, instance):
         real_command = subject.command()
 
-        real_command.run_for('bootstrap')
+        real_command.run_for('node-0')
 
         self.mock_instance.restart.assert_called_with()

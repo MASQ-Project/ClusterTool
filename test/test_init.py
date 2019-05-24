@@ -62,12 +62,12 @@ class TestInit:
     def instances(self, mocker, available_instances):
         self.mock_first_instance = mocker.Mock()
         self.mock_second_instance = mocker.Mock()
-        self.mock_first_instance.name = 'bootstrap'
+        self.mock_first_instance.name = 'node-0'
         self.mock_second_instance.name = 'node-1'
         self.mock_first_instance.__class__ = 'ExistingClass'
         self.mock_second_instance.__class__ = 'ExistingClass'
         mocker.patch.object(subject, 'INSTANCES', {
-            'bootstrap': self.mock_first_instance,
+            'node-0': self.mock_first_instance,
             'node-1': self.mock_second_instance
         })
 
@@ -109,7 +109,7 @@ class TestInit:
             mocker.call().strip()
         ]
 
-        assert subject.INSTANCES['bootstrap'].name == 'bootstrap'
+        assert subject.INSTANCES['node-0'].name == 'node-0'
         assert subject.INSTANCES['node-1'].name == 'node-1'
         assert subject.INSTANCES['node-2'].instance_api.name == 'Google1'
         assert subject.INSTANCES['node-3'].instance_api.name == 'Google2'
@@ -153,7 +153,7 @@ class TestInit:
             mocker.call().strip()
         ]
 
-        assert subject.INSTANCES['bootstrap'].name == 'bootstrap'
+        assert subject.INSTANCES['node-0'].name == 'node-0'
         assert subject.INSTANCES['node-1'].name == 'node-1'
         assert subject.INSTANCES['node-2'].instance_api.name == 'Google1'
         assert len(subject.COMPUTE_INSTANCES) == 1
@@ -191,7 +191,7 @@ class TestInit:
             mocker.call().strip()
         ]
 
-        assert subject.INSTANCES['bootstrap'].name == 'bootstrap'
+        assert subject.INSTANCES['node-0'].name == 'node-0'
         assert subject.INSTANCES['node-1'].name == 'node-1'
         assert subject.INSTANCES['node-2'].instance_api.name == 'VBox1'
         assert len(subject.VIRTUALBOX_INSTANCES) == 1
@@ -228,7 +228,7 @@ class TestInit:
             mocker.call().strip()
         ]
 
-        assert subject.INSTANCES['bootstrap'].name == 'bootstrap'
+        assert subject.INSTANCES['node-0'].name == 'node-0'
         assert subject.INSTANCES['node-1'].name == 'node-1'
         assert subject.INSTANCES['node-2'].instance_api.name == 'Docker1'
         assert len(subject.DOCKER_INSTANCES) == 1
@@ -237,7 +237,8 @@ class TestInit:
         self.mock_second_instance.start.assert_called_with()
         self.mock_first_docker_instance.start_instance.assert_called_with()
 
-    def test_command_bootstrap_with_one_when_prompted(self, mocker, available_instances, printing):
+    # @TODO @SC-815
+    def test_command_node0_with_one_when_prompted(self, mocker, available_instances, printing):
         real_command = subject.command()
 
         assert real_command.name == 'init'
@@ -255,7 +256,7 @@ class TestInit:
             mocker.call('\nAvailable configured local instances (probably cannot be used alongside above):'),
             mocker.call("\tVirtualBox: ['VBox1', 'VBox2']\n"),
             mocker.call("\tDocker: ['Docker1', 'Docker2']\n"),
-            mocker.call("Configured bootstrap on Google1 (Compute)")
+            mocker.call("Configured node-0 on Google1 (Compute)")
         ]
 
         assert mock_input.mock_calls == [
@@ -265,7 +266,7 @@ class TestInit:
             mocker.call().strip()
         ]
 
-        assert subject.INSTANCES['bootstrap'].name == 'bootstrap'
+        assert subject.INSTANCES['node-0'].name == 'node-0'
         assert len(subject.COMPUTE_INSTANCES) == 1
         assert len(subject.EC2_INSTANCES) == 2
 

@@ -27,7 +27,7 @@ class TestNodeDockerCommands:
             'dns_servers': '--dns_servers 1.1.1.1',
             'log_level': '--log_level trace',
             'data_directory': '--data_directory /tmp',
-            'additional_args': '--node_type bootstrap'
+            'additional_args': '--node_type bootstrap' # @TODO @SC-815
         }
         self.mock_executor.execute_sync.return_value = 'success'
 
