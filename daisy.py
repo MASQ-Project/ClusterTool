@@ -20,7 +20,7 @@ def _start_daisy_chain(count):
         return
 
     next_descriptor = ''
-    for node_name, instance in INSTANCES.iteritems():
+    for node_name, instance in sorted(INSTANCES.iteritems()):
         if iterations_left == 0:
             break
 
