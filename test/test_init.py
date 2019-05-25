@@ -237,7 +237,6 @@ class TestInit:
         self.mock_second_instance.start.assert_called_with()
         self.mock_first_docker_instance.start_instance.assert_called_with()
 
-    # @TODO @SC-815
     def test_command_node0_with_one_when_prompted(self, mocker, available_instances, printing):
         real_command = subject.command()
 

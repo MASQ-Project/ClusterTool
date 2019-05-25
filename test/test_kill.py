@@ -10,7 +10,6 @@ import kill as subject
 
 class TestKill:
 
-    # @TODO @SC-815
     @pytest.fixture
     def neighbor(self, mocker):
         self.mock_instance = mocker.Mock()
