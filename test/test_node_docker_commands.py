@@ -26,8 +26,7 @@ class TestNodeDockerCommands:
         node_args = {
             'dns_servers': '--dns_servers 1.1.1.1',
             'log_level': '--log_level trace',
-            'data_directory': '--data_directory /tmp',
-            'additional_args': '--node_type bootstrap'
+            'data_directory': '--data_directory /tmp'
         }
         self.mock_executor.execute_sync.return_value = 'success'
 
@@ -56,8 +55,7 @@ class TestNodeDockerCommands:
             '--log_level', 'trace',
             '--data_directory', '/tmp',
             '--ip', '1.2.3.4',
-            '--wallet_address', '0x01020304010203040102030401020304EEEEEEEE',
-            '--node_type', 'bootstrap'
+            '--wallet_address', '0x01020304010203040102030401020304EEEEEEEE'
         ])
 
         assert result == 'success'

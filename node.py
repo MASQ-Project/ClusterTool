@@ -12,16 +12,16 @@ class Node:
         self.node_commands = node_commands
         self.descriptor = ""
 
-    def start(self, ip, bootstrap_info):
+    def start(self, ip, neighbor_info):
         if self.descriptor != "":
             print("it looks like node is already running on %s" % self.name)
-        elif bootstrap_info == "":
-            print("\tstarting node %s as bootstrap..." % self.name)
-            self._start_node_with(ip, "--node_type bootstrap")
+        elif neighbor_info == "":
+            print("\tstarting node %s..." % self.name)
+            self._start_node_with(ip)
             print("\tnode running: %s" % self.descriptor)
         else:
             print("\tstarting node %s..." % self.name)
-            self._start_node_with(ip, "--neighbors %s" % bootstrap_info)
+            self._start_node_with(ip, "--neighbors %s" % neighbor_info)
             print("\tnode running: %s" % self.descriptor)
         return self.descriptor
 

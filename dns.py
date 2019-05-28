@@ -15,8 +15,6 @@ class Dns:
         self._generic("revert")
 
     def _generic(self, cmd):
-        if self.name == 'bootstrap':
-            return
         if self.dns_status == "%sed" % cmd:
             print("%s already %sed" % (self.name, cmd))
             return

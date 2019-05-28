@@ -76,18 +76,6 @@ class TestTrafficHandler:
             mocker.call(2), mocker.call(2)
         ]
 
-    def test_curl_bootstrap(self, mocks):
-        subject = TrafficHandler('bootstrap', None)
-
-        subject.curl()
-
-        assert self.mock_input.call_count == 0
-        assert self.mock_print.call_count == 0
-        assert self.mock_curl.call_count == 0
-        assert not subject.traffic_handles
-        assert self.mock_curl.call_count == 0
-        assert self.mock_time.sleep.call_count == 0
-
     def test_curl_bad_input(self, mocks, mocker):
         subject = TrafficHandler('snow', self.mock_traffic_commands)
         self.mock_input.side_effect = ['NaN', '-1', '']
@@ -135,15 +123,6 @@ class TestTrafficHandler:
             mocker.call('amazon.com', 'wget command'),
         ]
 
-    def test_wget_bootstrap(self, mocks, mocker):
-        subject = TrafficHandler('bootstrap', self.mock_traffic_commands)
-
-        subject.wget()
-
-        assert self.mock_print.call_count == 0
-        assert not subject.traffic_handles
-        assert self.mock_wget.call_count == 0
-
     def test_stop(self, mocks, mocker):
         subject = TrafficHandler('snow', self.mock_traffic_commands)
         self.mock_traffic_commands.cleanup = 'cleanup command'
@@ -159,13 +138,6 @@ class TestTrafficHandler:
         assert self.mock_print.mock_calls == [
             mocker.call('\tdone.')
         ]
-
-    def test_stop_bootstrap(self, mocks):
-        subject = TrafficHandler('bootstrap', self.mock_traffic_commands)
-
-        subject.stop()
-
-        assert self.mock_print.call_count == 0
 
     def test_verify(self, mocks, mocker):
         subject = TrafficHandler('snow', self.mock_traffic_commands)
@@ -191,10 +163,3 @@ class TestTrafficHandler:
         assert self.mock_print.mock_calls == [
             mocker.call("\tyou didn't request traffic on snow")
         ]
-
-    def test_verify_bootstrap(self, mocks):
-        subject = TrafficHandler('bootstrap', self.mock_traffic_commands)
-
-        subject.verify()
-
-        assert self.mock_print.call_count == 0

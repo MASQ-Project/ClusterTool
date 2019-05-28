@@ -33,8 +33,8 @@ class Instance:
     def update(self):
         self.node.update()
 
-    def start_node(self, bootstrap_info=""):
-        return self.node.start(self.get_ip(), bootstrap_info)
+    def start_node(self, neighbor_info=""):
+        return self.node.start(self.get_ip(), neighbor_info)
 
     def stop_node(self):
         self.dns.revert()
@@ -76,8 +76,4 @@ class Instance:
 
 
 def make_name(node_id):
-    int_node_id = int(node_id)
-    if int_node_id == 0:
-        return 'bootstrap'
-    else:
-        return "node-%s" % int_node_id
+    return "node-%s" % int(node_id)

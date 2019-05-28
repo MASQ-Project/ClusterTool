@@ -20,13 +20,6 @@ class TestDns:
         assert subject.dns_commands == 'commands'
         assert subject.dns_status == ''
 
-    def test_subvert_bootstrap(self, commands, printing):
-        subject = Dns('bootstrap', self.mock_commands)
-
-        subject.subvert()
-
-        assert self.mock_print.call_count == 0
-
     def test_subvert_standard(self, mocker, commands, printing):
         subject = Dns('standard', self.mock_commands)
         self.mock_commands.dns_utility.return_value = ("subverted", "")
@@ -44,13 +37,6 @@ class TestDns:
         subject.subvert()
 
         self.mock_print.assert_called_with('standard already subverted')
-
-    def test_revert_bootstrap(self, commands, printing):
-        subject = Dns('bootstrap', self.mock_commands)
-
-        subject.revert()
-
-        assert self.mock_print.call_count == 0
 
     def test_revert_standard(self, mocker, commands, printing):
         subject = Dns('standard', self.mock_commands)
