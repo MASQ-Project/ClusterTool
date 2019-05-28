@@ -104,8 +104,7 @@ If you try to start any other node before `node-0`, `start` will complain.
 `start` will also complain if you try to start `node-0` more than once.
 However, it does not prevent you from starting any other node more than once.
 
-If nodes are started in an acceptable order, the `start` command will call the relevant `instance.py` function:
-`start_bootstrap_node` or `start_node` (sending in the `node-0` node descriptor).
+If nodes are started in an acceptable order, the `start` command will call the relevant `instance.py` function: `start_node` (sending in the `node-0` node descriptor).
 
 The first thing `start` does is remove any existing `SubstratumNode.log` file.
 This is to ensure that the log will only contain the current node descriptor.
