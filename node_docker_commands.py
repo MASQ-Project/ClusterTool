@@ -40,7 +40,7 @@ class NodeDockerCommands(NodeCommands):
         return 0
 
     def tail(self):
-        command = "\"{0}({1})\" docker logs -f {0}".format(self.name, self.get_ip(), self.name)
+        command = "\"{0}({1})\" docker exec -it {0} tail -f -n 250 /tmp/SubstratumNode.log".format(self.name, self.get_ip(), self.name)
         return self.terminal_executor.execute_in_new_terminal(command)
 
     def shell(self):

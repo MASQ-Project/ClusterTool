@@ -158,7 +158,7 @@ class TestNodeDockerCommands:
 
         result = subject.tail()
 
-        self.mock_terminal_executor.return_value.execute_in_new_terminal.assert_called_with('\"bacon(1.2.3.4)\" docker logs -f bacon')
+        self.mock_terminal_executor.return_value.execute_in_new_terminal.assert_called_with('\"bacon(1.2.3.4)\" docker exec -it bacon tail -f -n 250 /tmp/SubstratumNode.log')
 
         assert result == 'tailing'
 
