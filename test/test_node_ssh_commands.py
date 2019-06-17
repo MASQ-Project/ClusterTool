@@ -27,7 +27,7 @@ class TestNodeSshCommands:
     def test_start(self, mocks):
         subject = NodeSshCommands(lambda: '1.2.3.4')
         node_args = {
-            'dns_servers': 'standard',
+            'dns_servers': '1.1.1.1,8.8.8.8',
             'log_level': 'debug',
             'data_directory': '/tmp',
             'ip': '1.2.3.4',
@@ -40,7 +40,40 @@ class TestNodeSshCommands:
 
         self.mock_executor.return_value.execute_sync.assert_called_with([
             'ssh', '-oStrictHostKeyChecking=no', 'mockeduser@1.2.3.4',
-            node_commands.START_COMMAND % node_args
+            'sudo ./SubstratumNode',
+            '--dns_servers', '1.1.1.1,8.8.8.8',
+            '--log_level', 'debug',
+            '--data_directory', '/tmp',
+            '--ip', '1.2.3.4',
+            '--wallet_address', '0xF00DFACE',
+            'hi',
+            '>', '/dev/null', '2>&1', '&'
+        ])
+
+        assert result == 'started'
+
+    def test_start_no_additional_args(self, mocks):
+        subject = NodeSshCommands(lambda: '1.2.3.4')
+        node_args = {
+            'dns_servers': '1.1.1.1,8.8.8.8',
+            'log_level': 'debug',
+            'data_directory': '/tmp',
+            'ip': '1.2.3.4',
+            'wallet_address': '0xF00DFACE',
+        }
+        self.mock_executor.return_value.execute_sync.return_value = 'started'
+
+        result = subject.start(node_args)
+
+        self.mock_executor.return_value.execute_sync.assert_called_with([
+            'ssh', '-oStrictHostKeyChecking=no', 'mockeduser@1.2.3.4',
+            'sudo ./SubstratumNode',
+            '--dns_servers', '1.1.1.1,8.8.8.8',
+            '--log_level', 'debug',
+            '--data_directory', '/tmp',
+            '--ip', '1.2.3.4',
+            '--wallet_address', '0xF00DFACE',
+            '>', '/dev/null', '2>&1', '&'
         ])
         assert result == 'started'
 
@@ -115,7 +148,7 @@ class TestNodeSshCommands:
 
         self.mock_terminal_executor.return_value.execute_in_new_terminal\
             .assert_called_with(
-                'ssh -oStrictHostKeyChecking=no mockeduser@1.2.3.4 %s' %
+                '1.2.3.4 ssh -oStrictHostKeyChecking=no mockeduser@1.2.3.4 %s' %
                 node_commands.TAIL_LOGS_COMMAND
             )
         assert result == 'tailing'
@@ -129,6 +162,6 @@ class TestNodeSshCommands:
 
         self.mock_terminal_executor.return_value.execute_in_new_terminal\
             .assert_called_with(
-                'ssh -oStrictHostKeyChecking=no mockeduser@1.2.3.4'
+                '1.2.3.4 ssh -oStrictHostKeyChecking=no mockeduser@1.2.3.4'
             )
         assert result == 'shell'

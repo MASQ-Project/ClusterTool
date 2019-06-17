@@ -14,9 +14,19 @@ class NodeSshCommands(cmd.NodeCommands):
         self.terminal_executor = TerminalExecutor(self.executor)
 
     def start(self, node_args):
-        return self.executor.execute_sync(self._wrap_with_ssh([
-            cmd.START_COMMAND % node_args
-        ]))
+        command = [
+            "sudo ./SubstratumNode",
+            "--dns_servers", node_args["dns_servers"],
+            "--log_level", node_args["log_level"],
+            "--data_directory", node_args["data_directory"],
+            "--ip", node_args["ip"],
+            "--wallet_address", node_args["wallet_address"],
+        ]
+        if "additional_args" in node_args:
+            additional_args = node_args["additional_args"].split(' ')
+            command.extend(additional_args)
+        command.extend([">", "/dev/null", "2>&1", "&"])
+        return self.executor.execute_sync(self._wrap_with_ssh(command))
 
     def stop(self):
         return self.executor.execute_sync(self._wrap_with_ssh([
@@ -56,7 +66,9 @@ class NodeSshCommands(cmd.NodeCommands):
 
     def _execute_in_new_terminal(self, command_list):
         command = self._list_to_string(self._wrap_with_ssh(command_list))
-        return self.terminal_executor.execute_in_new_terminal(command)
+        title = "%s" % self.get_ip()
+        wrapper_command = "{0} {1}".format(title, command)
+        return self.terminal_executor.execute_in_new_terminal(wrapper_command)
 
     def _list_to_string(self, command_list):
         seperator = ' '

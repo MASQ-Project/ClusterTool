@@ -59,7 +59,7 @@ class NodeDockerCommands(NodeCommands):
             "--ip", self.get_ip(),
             "--dns", "127.0.0.1",
             "--name", self.name,
-	    "--hostname", self.name,
+            "--hostname", self.name,
             "--net", "test_net",
             "--volume", volume,
             "test_net_tools",
