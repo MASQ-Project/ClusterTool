@@ -27,11 +27,11 @@ class TestNodeSshCommands:
     def test_start(self, mocks):
         subject = NodeSshCommands(lambda: '1.2.3.4')
         node_args = {
-            'dns_servers': '1.1.1.1,8.8.8.8',
-            'log_level': 'debug',
-            'data_directory': '/tmp',
-            'ip': '1.2.3.4',
-            'wallet_address': '0xF00DFACE',
+            'dns_servers': '--dns_servers 1.1.1.1,8.8.8.8',
+            'log_level': '--log_levl debug',
+            'data_directory': '--data_directory /tmp',
+            'ip': '--ip 1.2.3.4',
+            'wallet_address': '--wallet_address 0xF00DFACE',
             'additional_args': 'hi'
         }
         self.mock_executor.return_value.execute_sync.return_value = 'started'
@@ -55,11 +55,11 @@ class TestNodeSshCommands:
     def test_start_no_additional_args(self, mocks):
         subject = NodeSshCommands(lambda: '1.2.3.4')
         node_args = {
-            'dns_servers': '1.1.1.1,8.8.8.8',
-            'log_level': 'debug',
-            'data_directory': '/tmp',
-            'ip': '1.2.3.4',
-            'wallet_address': '0xF00DFACE',
+            'dns_servers': '--dns_servers 1.1.1.1,8.8.8.8',
+            'log_level': '--log_levl debug',
+            'data_directory': '--data_directory /tmp',
+            'ip': '--ip 1.2.3.4',
+            'wallet_address': '--wallet_address 0xF00DFACE',
         }
         self.mock_executor.return_value.execute_sync.return_value = 'started'
 

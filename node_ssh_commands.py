@@ -16,11 +16,11 @@ class NodeSshCommands(cmd.NodeCommands):
     def start(self, node_args):
         command = [
             "sudo ./SubstratumNode",
-            "--dns_servers", node_args["dns_servers"],
-            "--log_level", node_args["log_level"],
-            "--data_directory", node_args["data_directory"],
-            "--ip", node_args["ip"],
-            "--wallet_address", node_args["wallet_address"],
+            "--dns_servers", node_args["dns_servers"].split(' ')[1],
+            "--log_level", node_args["log_level"].split(' ')[1],
+            "--data_directory", node_args["data_directory"].split(' ')[1],
+            "--ip", node_args["ip"].split(' ')[1],
+            "--wallet_address", node_args["wallet_address"].split(' ')[1],
         ]
         if "additional_args" in node_args:
             additional_args = node_args["additional_args"].split(' ')
