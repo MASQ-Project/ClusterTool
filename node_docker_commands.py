@@ -1,13 +1,16 @@
 # Copyright (c) 2019, Substratum LLC (https://substratum.net) and/or its affiliates. All rights reserved.
 from __future__ import print_function
-from node_commands import *
-from node import Node
-from executor import Executor, TerminalExecutor
+
 import os
 import pexpect
 
+from executor import Executor, TerminalExecutor
+from node import Node
+from node_commands import *
+
+
 class NodeDockerCommands(NodeCommands):
-    
+
     def __init__(self, name, ip_fn):
         self.get_ip = ip_fn
         self.name = name
@@ -24,8 +27,9 @@ class NodeDockerCommands(NodeCommands):
         return self.executor.execute_sync(["docker", "stop", "-t0", self.name])
 
     def cat_logs(self):
-        return self.executor.execute_async(["docker", "logs", self.name])
-    
+        command = ["docker", "exec", "-it", self.name, "cat", "/tmp/SubstratumNode.log"]
+        return self.executor.execute_async(command)
+
     def retrieve_logs(self, destination):
         args = [
             "docker",
@@ -40,7 +44,9 @@ class NodeDockerCommands(NodeCommands):
         return 0
 
     def tail(self):
-        command = "\"{0}({1})\" docker exec -it {0} tail -f -n 250 /tmp/SubstratumNode.log".format(self.name, self.get_ip(), self.name)
+        command = "\"{0}({1})\" docker exec -it {0} tail -f -n 250 /tmp/SubstratumNode.log".format(self.name,
+                                                                                                   self.get_ip(),
+                                                                                                   self.name)
         return self.terminal_executor.execute_in_new_terminal(command)
 
     def shell(self):

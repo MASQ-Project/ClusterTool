@@ -125,9 +125,7 @@ class TestNodeDockerCommands:
 
         result = subject.cat_logs()
 
-        self.mock_executor.execute_async.assert_called_with([
-            'docker', 'logs', 'bacon'
-        ])
+        self.mock_executor.execute_async.assert_called_with(["docker", "exec", "-it", "bacon", "cat", "/tmp/SubstratumNode.log"])
 
         assert result == 'meow'
 
