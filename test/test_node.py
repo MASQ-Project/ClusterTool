@@ -46,12 +46,13 @@ class TestNode:
         self.mock_node_commands.cat_logs.return_value.match.group.assert_called_with(1)
         self.mock_node_commands.cat_logs.return_value.match.group.return_value.split.assert_called_with('\r')
         self.mock_node_commands.start.assert_called_with({
-            'dns_servers': "--dns_servers 1.1.1.1",
-            'log_level': "--log_level trace",
-            'data_directory': "--data_directory /tmp",
+            'dns-servers': "--dns-servers 1.1.1.1",
+            'log-level': "--log-level trace",
+            'data-directory': "--data-directory /tmp",
             'ip': "--ip 1.2.3.4",
-            'wallet_address': "--wallet_address 0x01020304010203040102030401020304EEEEEEEE",
-            'additional_args': "--neighbors neighbor_descriptor",
+            'earning-wallet': "--earning-wallet 0x01020304010203040102030401020304EEEEEEEE",
+            'consuming-private-key': '--consuming-private-key 89d59b93ef6a94c977e1812b727d5f123f7d825ab636e83aad3e2845a68eaedb',
+            'additional-args': "--neighbors neighbor_descriptor",
         })
         assert real_descriptor == 'descriptor'
 
@@ -76,11 +77,12 @@ class TestNode:
         self.mock_node_commands.cat_logs.return_value.match.group.assert_called_with(1)
         self.mock_node_commands.cat_logs.return_value.match.group.return_value.split.assert_called_with('\r')
         self.mock_node_commands.start.assert_called_with({
-            'dns_servers': "--dns_servers 1.1.1.1",
-            'log_level': "--log_level trace",
-            'data_directory': "--data_directory /tmp",
+            'dns-servers': "--dns-servers 1.1.1.1",
+            'log-level': "--log-level trace",
+            'data-directory': "--data-directory /tmp",
             'ip': "--ip 1.2.3.4",
-            'wallet_address': "--wallet_address 0x01020304010203040102030401020304EEEEEEEE",
+            'earning-wallet': "--earning-wallet 0x01020304010203040102030401020304EEEEEEEE",
+            'consuming-private-key': '--consuming-private-key 89d59b93ef6a94c977e1812b727d5f123f7d825ab636e83aad3e2845a68eaedb',
         })
         assert real_descriptor == 'descriptor'
 

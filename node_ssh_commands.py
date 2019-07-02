@@ -16,14 +16,15 @@ class NodeSshCommands(cmd.NodeCommands):
     def start(self, node_args):
         command = [
             "sudo ./SubstratumNode",
-            "--dns_servers", node_args["dns_servers"].split(' ')[1],
-            "--log_level", node_args["log_level"].split(' ')[1],
-            "--data_directory", node_args["data_directory"].split(' ')[1],
+            "--dns-servers", node_args["dns-servers"].split(' ')[1],
+            "--log-level", node_args["log-level"].split(' ')[1],
+            "--data-directory", node_args["data-directory"].split(' ')[1],
             "--ip", node_args["ip"].split(' ')[1],
-            "--wallet_address", node_args["wallet_address"].split(' ')[1],
+            "--earning-wallet", node_args["earning-wallet"].split(' ')[1],
+            "--consuming-private-key", node_args["consuming-private-key"].split(' ')[1],
         ]
-        if "additional_args" in node_args:
-            additional_args = node_args["additional_args"].split(' ')
+        if "additional-args" in node_args:
+            additional_args = node_args["additional-args"].split(' ')
             command.extend(additional_args)
         command.extend([">", "/dev/null", "2>&1", "&"])
         return self.executor.execute_sync(self._wrap_with_ssh(command))
