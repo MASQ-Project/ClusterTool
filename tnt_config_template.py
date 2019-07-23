@@ -3,6 +3,9 @@
 INSTANCES = {}
 INSTANCE_USER = ''
 
+WALLET_ADDRESSES = []
+BLOCKCHAIN_SERVICE_URL = ''
+
 # CLOUD CONFIGS
 
 # Google Compute config
@@ -22,7 +25,6 @@ EC2_CONFIG = {
 
 from ec2 import EC2 as Amazon
 EC2_INSTANCES = []
-
 
 # LOCAL CONFIGS
 # can't (easily) be used alongside cloud APIs until "originating only" nodes are a thing

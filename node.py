@@ -5,6 +5,7 @@ import pexpect
 from graphviz import Source
 import instance
 import sha3
+from tnt_config import WALLET_ADDRESSES
 
 class Node:
     def __init__(self, name, node_commands):
@@ -82,6 +83,10 @@ class Node:
     def earning_wallet(ip):
         fragment = Node._wallet_fragment(ip)
         return "0x%s%s%s%sEEEEEEEE" % (fragment, fragment, fragment, fragment)  # EEEs for "earning"
+
+    @staticmethod
+    def earning_wallet_address(index):
+        return WALLET_ADDRESSES[index % len(WALLET_ADDRESSES)]
 
     @staticmethod
     def consuming_private_key(ip):
