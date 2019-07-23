@@ -11,6 +11,14 @@ class TestNode:
         self.mock_node_commands = mocker.Mock()
 
     @pytest.fixture
+    def blockchain_service_url(self, mocker):
+        self.mock_blockchain_service_url = mocker.Mock()
+
+    @pytest.fixture
+    def earning_wallet_address(self, mocker):
+        self.mock_earning_wallet_address = mocker.Mock()
+
+    @pytest.fixture
     def printing(self, mocker):
         self.mock_print = mocker.patch('__builtin__.print', autospec=True)
 
@@ -25,8 +33,13 @@ class TestNode:
         assert subject.node_commands == 'node_commands'
         assert subject.descriptor == ''
 
-    def test_start_standard_node_wait_for_descriptor(self, node_commands, printing, mocker):
+    def test_start_standard_node_wait_for_descriptor(self, node_commands, blockchain_service_url, earning_wallet_address, printing, mocker):
         subject = Node('booga', self.mock_node_commands)
+        subject.blockchain_service_url = self.mock_blockchain_service_url
+        subject.earning_wallet_address = self.mock_earning_wallet_address
+
+        self.mock_blockchain_service_url.return_value = "the_blockchain_service_URL"
+        self.mock_earning_wallet_address.return_value = "the_wallet"
         self.mock_node_commands.cat_logs.return_value.expect.side_effect = [1, 0]
         self.mock_node_commands.cat_logs.return_value.match.group.return_value.split.return_value = [' descriptor ']
 
@@ -50,14 +63,20 @@ class TestNode:
             'log-level': "--log-level trace",
             'data-directory': "--data-directory /tmp",
             'ip': "--ip 1.2.3.4",
-            'earning-wallet': "--earning-wallet 0x01020304010203040102030401020304EEEEEEEE",
+            'blockchain-service-url': '--blockchain-service-url the_blockchain_service_URL',
+            'earning-wallet': '--earning-wallet the_wallet',
             'consuming-private-key': '--consuming-private-key 89d59b93ef6a94c977e1812b727d5f123f7d825ab636e83aad3e2845a68eaedb',
             'additional-args': "--neighbors neighbor_descriptor",
         })
         assert real_descriptor == 'descriptor'
 
-    def test_start_node_without_neighbors_wait_for_descriptor(self, node_commands, printing, mocker):
+    def test_start_node_without_neighbors_wait_for_descriptor(self, node_commands, blockchain_service_url, earning_wallet_address, printing, mocker):
         subject = Node('booga', self.mock_node_commands)
+        subject.blockchain_service_url = self.mock_blockchain_service_url
+        subject.earning_wallet_address = self.mock_earning_wallet_address
+
+        self.mock_blockchain_service_url.return_value = "the_blockchain_service_URL"
+        self.mock_earning_wallet_address.return_value = "the_wallet"
         self.mock_node_commands.cat_logs.return_value.expect.side_effect = [1, 0]
         self.mock_node_commands.cat_logs.return_value.match.group.return_value.split.return_value = [' descriptor ']
 
@@ -81,7 +100,8 @@ class TestNode:
             'log-level': "--log-level trace",
             'data-directory': "--data-directory /tmp",
             'ip': "--ip 1.2.3.4",
-            'earning-wallet': "--earning-wallet 0x01020304010203040102030401020304EEEEEEEE",
+            'blockchain-service-url': '--blockchain-service-url the_blockchain_service_URL',
+            'earning-wallet': '--earning-wallet the_wallet',
             'consuming-private-key': '--consuming-private-key 89d59b93ef6a94c977e1812b727d5f123f7d825ab636e83aad3e2845a68eaedb',
         })
         assert real_descriptor == 'descriptor'

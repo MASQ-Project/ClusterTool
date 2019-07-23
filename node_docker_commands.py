@@ -11,10 +11,9 @@ from tnt_config import BLOCKCHAIN_SERVICE_URL
 
 class NodeDockerCommands(NodeCommands):
 
-    def __init__(self, name, ip_fn, instance_index):
+    def __init__(self, name, ip_fn):
         self.get_ip = ip_fn
         self.name = name
-        self.instance_index = instance_index
         self.executor = Executor()
         self.terminal_executor = TerminalExecutor(self.executor)
 
@@ -63,7 +62,7 @@ class NodeDockerCommands(NodeCommands):
             "docker",
             "run",
             "--detach",
-            "--ip", self.get_ip(),
+            "--ip", node_args["ip"].split(' ')[1],
             "--name", self.name,
             "--hostname", self.name,
             "--net", "test_net",
@@ -73,10 +72,10 @@ class NodeDockerCommands(NodeCommands):
             "--dns-servers", node_args["dns-servers"].split(' ')[1],
             "--log-level", node_args["log-level"].split(' ')[1],
             "--data-directory", node_args["data-directory"].split(' ')[1],
-            "--ip", self.get_ip(),
-            "--blockchain-service-url", BLOCKCHAIN_SERVICE_URL,
-            "--earning-wallet", Node.earning_wallet_address(self.instance_index - 3),
-            "--consuming-private-key", Node.consuming_private_key(self.get_ip()),
+            "--ip", node_args["ip"].split(' ')[1],
+            "--blockchain-service-url", node_args["blockchain-service-url"].split(' ')[1],
+            "--earning-wallet", node_args["earning-wallet"].split(' ')[1],
+            "--consuming-private-key", node_args["consuming-private-key"].split(' ')[1],
         ]
         if "additional-args" in node_args:
             additional_args = node_args["additional-args"].split(' ')

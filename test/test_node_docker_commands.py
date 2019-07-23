@@ -24,9 +24,13 @@ class TestNodeDockerCommands:
         subject = NodeDockerCommands('bacon', lambda: '1.2.3.4')
         self.mock_executor.execute_async.return_value.expect.return_value = 1  # nonexistent
         node_args = {
+            'ip': '--ip 1.2.3.4',
             'dns-servers': '--dns-servers 1.1.1.1',
             'log-level': '--log-level trace',
-            'data-directory': '--data-directory /tmp'
+            'data-directory': '--data-directory /tmp',
+            'blockchain-service-url': "--blockchain-service-url https://some.url.to.the.blockchain.com",
+            'earning-wallet': '--earning-wallet 0xF00DFACE',
+            'consuming-private-key': '--consuming-private-key 89d59b93ef6a94c977e1812b727d5f123f7d825ab636e83aad3e2845a68eaedb',
         }
         self.mock_executor.execute_sync.return_value = 'success'
 
@@ -44,7 +48,6 @@ class TestNodeDockerCommands:
             'docker', 'run',
             '--detach',
             '--ip', '1.2.3.4',
-            '--dns', '127.0.0.1',
             '--name', 'bacon',
             '--hostname', 'bacon',
             '--net', 'test_net',
@@ -55,8 +58,9 @@ class TestNodeDockerCommands:
             '--log-level', 'trace',
             '--data-directory', '/tmp',
             '--ip', '1.2.3.4',
-            '--earning-wallet', '0x01020304010203040102030401020304EEEEEEEE',
-            '--consuming-private-key', '89d59b93ef6a94c977e1812b727d5f123f7d825ab636e83aad3e2845a68eaedb'
+            '--blockchain-service-url', 'https://some.url.to.the.blockchain.com',
+            '--earning-wallet', '0xF00DFACE',
+            '--consuming-private-key', '89d59b93ef6a94c977e1812b727d5f123f7d825ab636e83aad3e2845a68eaedb',
         ])
 
         assert result == 'success'
@@ -65,10 +69,14 @@ class TestNodeDockerCommands:
         subject = NodeDockerCommands('bacon', lambda: '1.2.3.4')
         self.mock_executor.execute_async.return_value.expect.return_value = 0  # existing
         node_args = {
+            'ip': '--ip 1.2.3.4',
             'dns-servers': '--dns-servers 1.1.1.2',
             'log-level': '--log-level debug',
             'data-directory': '--data-directory /tmp',
-            'additional-args': '--neighbors howdy'
+            'additional-args': '--neighbors howdy',
+            'blockchain-service-url': "--blockchain-service-url https://some.url.to.the.blockchain.com",
+            'earning-wallet': '--earning-wallet 0xF00DFACE',
+            'consuming-private-key': '--consuming-private-key 89d59b93ef6a94c977e1812b727d5f123f7d825ab636e83aad3e2845a68eaedb',
         }
         self.mock_executor.execute_sync.return_value = 'success'
 
@@ -90,7 +98,6 @@ class TestNodeDockerCommands:
                 'docker', 'run',
                 '--detach',
                 '--ip', '1.2.3.4',
-                '--dns', '127.0.0.1',
                 '--name', 'bacon',
                 '--hostname', 'bacon',
                 '--net', 'test_net',
@@ -101,7 +108,8 @@ class TestNodeDockerCommands:
                 '--log-level', 'debug',
                 '--data-directory', '/tmp',
                 '--ip', '1.2.3.4',
-                '--earning-wallet', '0x01020304010203040102030401020304EEEEEEEE',
+                '--blockchain-service-url', 'https://some.url.to.the.blockchain.com',
+                '--earning-wallet', '0xF00DFACE',
                 '--consuming-private-key', '89d59b93ef6a94c977e1812b727d5f123f7d825ab636e83aad3e2845a68eaedb',
                 '--neighbors', 'howdy'
             ])

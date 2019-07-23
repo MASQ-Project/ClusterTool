@@ -31,6 +31,7 @@ class TestNodeSshCommands:
             'log-level': '--log-level debug',
             'data-directory': '--data-directory /tmp',
             'ip': '--ip 1.2.3.4',
+            'blockchain-service-url': "--blockchain-service-url https://some.url.to.the.blockchain.com",
             'earning-wallet': '--earning-wallet 0xF00DFACE',
             'consuming-private-key': '--consuming-private-key 89d59b93ef6a94c977e1812b727d5f123f7d825ab636e83aad3e2845a68eaedb',
             'additional-args': 'hi'
@@ -46,6 +47,7 @@ class TestNodeSshCommands:
             '--log-level', 'debug',
             '--data-directory', '/tmp',
             '--ip', '1.2.3.4',
+            '--blockchain-service-url', 'https://some.url.to.the.blockchain.com',
             '--earning-wallet', '0xF00DFACE',
             '--consuming-private-key', '89d59b93ef6a94c977e1812b727d5f123f7d825ab636e83aad3e2845a68eaedb',
             'hi',
@@ -61,6 +63,7 @@ class TestNodeSshCommands:
             'log-level': '--log-level debug',
             'data-directory': '--data-directory /tmp',
             'ip': '--ip 1.2.3.4',
+            'blockchain-service-url': "--blockchain-service-url https://some.url.to.the.blockchain.com",
             'earning-wallet': '--earning-wallet 0xF00DFACE',
             'consuming-private-key': '--consuming-private-key 89d59b93ef6a94c977e1812b727d5f123f7d825ab636e83aad3e2845a68eaedb',
         }
@@ -75,6 +78,7 @@ class TestNodeSshCommands:
             '--log-level', 'debug',
             '--data-directory', '/tmp',
             '--ip', '1.2.3.4',
+            '--blockchain-service-url', 'https://some.url.to.the.blockchain.com',
             '--earning-wallet', '0xF00DFACE',
             '--consuming-private-key', '89d59b93ef6a94c977e1812b727d5f123f7d825ab636e83aad3e2845a68eaedb',
             '>', '/dev/null', '2>&1', '&'

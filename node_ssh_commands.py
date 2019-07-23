@@ -20,6 +20,7 @@ class NodeSshCommands(cmd.NodeCommands):
             "--log-level", node_args["log-level"].split(' ')[1],
             "--data-directory", node_args["data-directory"].split(' ')[1],
             "--ip", node_args["ip"].split(' ')[1],
+            "--blockchain-service-url", node_args["blockchain-service-url"].split(' ')[1],
             "--earning-wallet", node_args["earning-wallet"].split(' ')[1],
             "--consuming-private-key", node_args["consuming-private-key"].split(' ')[1],
         ]

@@ -22,7 +22,7 @@ class Docker(InstanceApi):
         self.name = name
         self.instance_index = instance_index
         self.executor = Executor()
-        self.node = Node(name, NodeDockerCommands(name, self.get_external_ip, self.instance_index))
+        self.node = Node(name, NodeDockerCommands(name, self.get_external_ip))
         self.dns = Dns(name, DnsDockerCommands(name))
         self.traffic = TrafficHandler(name, TrafficDockerCommands(name))
 

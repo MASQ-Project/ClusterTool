@@ -5,7 +5,7 @@ import pexpect
 from graphviz import Source
 import instance
 import sha3
-from tnt_config import WALLET_ADDRESSES
+from tnt_config import WALLET_ADDRESSES, BLOCKCHAIN_SERVICE_URL
 
 class Node:
     def __init__(self, name, node_commands):
@@ -49,7 +49,8 @@ class Node:
             'log-level': "--log-level trace",
             'data-directory': "--data-directory /tmp",
             'ip': "--ip %s" % ip,
-            'earning-wallet': "--earning-wallet %s" % self.earning_wallet(ip),
+            'blockchain-service-url': "--blockchain-service-url %s" % self.blockchain_service_url(),
+            'earning-wallet': "--earning-wallet %s" % self.earning_wallet_address(Node._get_index(ip)),
             'consuming-private-key': "--consuming-private-key %s" % self.consuming_private_key(ip),
         }
         if arg_str:
@@ -89,6 +90,10 @@ class Node:
         return WALLET_ADDRESSES[index % len(WALLET_ADDRESSES)]
 
     @staticmethod
+    def blockchain_service_url():
+        return BLOCKCHAIN_SERVICE_URL
+
+    @staticmethod
     def consuming_private_key(ip):
         keccak = sha3.keccak_256()
         keccak.update(ip)
@@ -99,6 +104,12 @@ class Node:
         match = re.search(r"(\d+)\.(\d+)\.(\d+)\.(\d+)", ip)
         octets = [int(match.group(1)), int(match.group(2)), int(match.group(3)), int(match.group(4))]
         return "%02X%02X%02X%02X" % (octets[0], octets[1], octets[2], octets[3])
+
+    @staticmethod
+    def _get_index(ip):
+        match = re.search(r"(\d+)\.(\d+)\.(\d+)\.(\d+)", ip)
+        octets = [int(match.group(1)), int(match.group(2)), int(match.group(3)), int(match.group(4))]
+        return octets[3]
 
     def _handle_dot_graph_interaction(self, log_pattern, filename, prompt_message):
         p = self.node_commands.cat_logs()
