@@ -40,17 +40,19 @@ class Node:
                 print("*** scp failed with code %s ***" % return_code)
         print("\tdone.")
 
-    def _start_node_with(self, ip, arg_str):
+    def _start_node_with(self, ip=None, arg_str=None):
         # ensure the first descriptor match will be the current running node
         self._delete_existing_log()
         node_args = {
-            'dns_servers': "--dns_servers 1.1.1.1",
-            'log_level': "--log_level trace",
-            'data_directory': "--data_directory /tmp",
-            'ip': "--ip %s" % ip,
-            'wallet_address': "--wallet_address %s" % self.earning_wallet(ip),
-            'additional_args': arg_str,
+            'dns_servers': "--dns-servers 1.1.1.1",
+            'log_level': "--log-level trace",
+            'data_directory': "--data-directory /tmp",
+            'wallet_address': "--earning-wallet %s" % self.earning_wallet(ip),
         }
+        if ip != None:
+            node_args['ip'] = "--ip %s" % ip
+        if arg_str != None:
+            node_args['additional_args'] = arg_str            
         self.node_commands.start(node_args)
         self.descriptor = self._wait_for_descriptor()
 

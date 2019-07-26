@@ -59,16 +59,16 @@ class NodeDockerCommands(NodeCommands):
             "--ip", self.get_ip(),
             "--dns", "127.0.0.1",
             "--name", self.name,
-	    "--hostname", self.name,
+	       "--hostname", self.name,
             "--net", "test_net",
             "--volume", volume,
             "test_net_tools",
             "/node_root/node/SubstratumNode",
-            "--dns_servers", node_args["dns_servers"].split(' ')[1],
-            "--log_level", node_args["log_level"].split(' ')[1],
-            "--data_directory", node_args["data_directory"].split(' ')[1],
+            "--dns-servers", node_args["dns_servers"].split(' ')[1],
+            "--log-level", node_args["log_level"].split(' ')[1],
+            "--data-directory", node_args["data_directory"].split(' ')[1],
             "--ip", self.get_ip(),
-            "--wallet_address", Node.earning_wallet(self.get_ip()),
+            "--earning-wallet", Node.earning_wallet(self.get_ip()),
         ]
         if "additional_args" in node_args:
             additional_args = node_args["additional_args"].split(' ')

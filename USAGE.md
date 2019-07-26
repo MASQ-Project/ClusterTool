@@ -110,11 +110,11 @@ The first thing `start` does is remove any existing `SubstratumNode.log` file.
 This is to ensure that the log will only contain the current node descriptor.
 
 Once the previous log is removed, SubstratumNode is started with the following parameters:
-- `--dns_servers 1.1.1.1`
-- `--log_level trace`
-- `--data_directory /tmp`
+- `--dns-servers 1.1.1.1`
+- `--log-level trace`
+- `--data-directory /tmp`
 - `--ip <ip addr of the instance>`
-- `--wallet_address <fake address calculated from ip address>`
+- `--earning-wallet <fake address calculated from ip address>`
 - `--neighbors <neighbor descriptor>`
 
 Once SubstratumNode is started, `start` waits for the node descriptor to appear in the logs before completing.

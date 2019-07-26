@@ -24,9 +24,9 @@ class TestNodeDockerCommands:
         subject = NodeDockerCommands('bacon', lambda: '1.2.3.4')
         self.mock_executor.execute_async.return_value.expect.return_value = 1  # nonexistent
         node_args = {
-            'dns_servers': '--dns_servers 1.1.1.1',
-            'log_level': '--log_level trace',
-            'data_directory': '--data_directory /tmp'
+            'dns_servers': '--dns-servers 1.1.1.1',
+            'log_level': '--log-level trace',
+            'data_directory': '--data-directory /tmp'
         }
         self.mock_executor.execute_sync.return_value = 'success'
 
@@ -51,11 +51,11 @@ class TestNodeDockerCommands:
             '--volume', 'cwd/binaries/:/node_root/node',
             'test_net_tools',
             '/node_root/node/SubstratumNode',
-            '--dns_servers', '1.1.1.1',
-            '--log_level', 'trace',
-            '--data_directory', '/tmp',
+            '--dns-servers', '1.1.1.1',
+            '--log-level', 'trace',
+            '--data-directory', '/tmp',
             '--ip', '1.2.3.4',
-            '--wallet_address', '0x01020304010203040102030401020304EEEEEEEE'
+            '--earning-wallet', '0x01020304010203040102030401020304EEEEEEEE'
         ])
 
         assert result == 'success'
@@ -64,9 +64,9 @@ class TestNodeDockerCommands:
         subject = NodeDockerCommands('bacon', lambda: '1.2.3.4')
         self.mock_executor.execute_async.return_value.expect.return_value = 0  # existing
         node_args = {
-            'dns_servers': '--dns_servers 1.1.1.2',
-            'log_level': '--log_level debug',
-            'data_directory': '--data_directory /tmp',
+            'dns_servers': '--dns-servers 1.1.1.2',
+            'log_level': '--log-level debug',
+            'data_directory': '--data-directory /tmp',
             'additional_args': '--neighbors howdy'
         }
         self.mock_executor.execute_sync.return_value = 'success'
@@ -96,11 +96,11 @@ class TestNodeDockerCommands:
                 '--volume', 'cwd/binaries/:/node_root/node',
                 'test_net_tools',
                 '/node_root/node/SubstratumNode',
-                '--dns_servers', '1.1.1.2',
-                '--log_level', 'debug',
-                '--data_directory', '/tmp',
+                '--dns-servers', '1.1.1.2',
+                '--log-level', 'debug',
+                '--data-directory', '/tmp',
                 '--ip', '1.2.3.4',
-                '--wallet_address', '0x01020304010203040102030401020304EEEEEEEE',
+                '--earning-wallet', '0x01020304010203040102030401020304EEEEEEEE',
                 '--neighbors', 'howdy'
             ])
         ]
