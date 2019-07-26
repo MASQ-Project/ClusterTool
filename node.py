@@ -4,7 +4,7 @@ import re
 import pexpect
 from graphviz import Source
 import instance
-
+import sha3
 
 class Node:
     def __init__(self, name, node_commands):
@@ -44,15 +44,15 @@ class Node:
         # ensure the first descriptor match will be the current running node
         self._delete_existing_log()
         node_args = {
-            'dns_servers': "--dns-servers 1.1.1.1",
-            'log_level': "--log-level trace",
-            'data_directory': "--data-directory /tmp",
-            'wallet_address': "--earning-wallet %s" % self.earning_wallet(ip),
+            'dns-servers': "--dns-servers 1.1.1.1",
+            'log-level': "--log-level trace",
+            'data-directory': "--data-directory /tmp",
+            'ip': "--ip %s" % ip,
+            'earning-wallet': "--earning-wallet %s" % self.earning_wallet(ip),
+            'consuming-private-key': "--consuming-private-key %s" % self.consuming_private_key(ip),
         }
-        if ip != None:
-            node_args['ip'] = "--ip %s" % ip
-        if arg_str != None:
-            node_args['additional_args'] = arg_str            
+        if arg_str:
+            node_args['additional-args'] = arg_str
         self.node_commands.start(node_args)
         self.descriptor = self._wait_for_descriptor()
 
@@ -84,9 +84,10 @@ class Node:
         return "0x%s%s%s%sEEEEEEEE" % (fragment, fragment, fragment, fragment)  # EEEs for "earning"
 
     @staticmethod
-    def consuming_wallet(ip):
-        fragment = Node._wallet_fragment(ip)
-        return "0x%s%s%s%sCCCCCCCC" % (fragment, fragment, fragment, fragment)  # CCCs for "consuming"
+    def consuming_private_key(ip):
+        keccak = sha3.keccak_256()
+        keccak.update(ip)
+        return keccak.hexdigest()
 
     @staticmethod
     def _wallet_fragment(ip):

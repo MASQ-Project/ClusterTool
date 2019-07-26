@@ -46,12 +46,43 @@ class TestNode:
         self.mock_node_commands.cat_logs.return_value.match.group.assert_called_with(1)
         self.mock_node_commands.cat_logs.return_value.match.group.return_value.split.assert_called_with('\r')
         self.mock_node_commands.start.assert_called_with({
-            'dns_servers': "--dns-servers 1.1.1.1",
-            'log_level': "--log-level trace",
-            'data_directory': "--data-directory /tmp",
+            'dns-servers': "--dns-servers 1.1.1.1",
+            'log-level': "--log-level trace",
+            'data-directory': "--data-directory /tmp",
             'ip': "--ip 1.2.3.4",
-            'wallet_address': "--earning-wallet 0x01020304010203040102030401020304EEEEEEEE",
-            'additional_args': "--neighbors neighbor_descriptor",
+            'earning-wallet': "--earning-wallet 0x01020304010203040102030401020304EEEEEEEE",
+            'consuming-private-key': '--consuming-private-key 89d59b93ef6a94c977e1812b727d5f123f7d825ab636e83aad3e2845a68eaedb',
+            'additional-args': "--neighbors neighbor_descriptor",
+        })
+        assert real_descriptor == 'descriptor'
+
+    def test_start_node_without_neighbors_wait_for_descriptor(self, node_commands, printing, mocker):
+        subject = Node('booga', self.mock_node_commands)
+        self.mock_node_commands.cat_logs.return_value.expect.side_effect = [1, 0]
+        self.mock_node_commands.cat_logs.return_value.match.group.return_value.split.return_value = [' descriptor ']
+
+        real_descriptor = subject.start('1.2.3.4', "")
+
+        assert self.mock_print.mock_calls == [
+            mocker.call('\tstarting node booga...'),
+            mocker.call('\tdeleting previous log on booga...'),
+            mocker.call('\tdone.'),
+            mocker.call('\t\tWaiting for node info...'),
+            mocker.call('\t\tdone.'),
+            mocker.call('\tnode running: descriptor'),
+        ]
+
+        self.mock_node_commands.delete_logs.assert_called_with()
+        self.mock_node_commands.cat_logs.return_value.expect.assert_called_with(['.*SubstratumNode local descriptor: (.+)[\t\r\n\v\f ]', pexpect.EOF], timeout=None)
+        self.mock_node_commands.cat_logs.return_value.match.group.assert_called_with(1)
+        self.mock_node_commands.cat_logs.return_value.match.group.return_value.split.assert_called_with('\r')
+        self.mock_node_commands.start.assert_called_with({
+            'dns-servers': "--dns-servers 1.1.1.1",
+            'log-level': "--log-level trace",
+            'data-directory': "--data-directory /tmp",
+            'ip': "--ip 1.2.3.4",
+            'earning-wallet': "--earning-wallet 0x01020304010203040102030401020304EEEEEEEE",
+            'consuming-private-key': '--consuming-private-key 89d59b93ef6a94c977e1812b727d5f123f7d825ab636e83aad3e2845a68eaedb',
         })
         assert real_descriptor == 'descriptor'
 

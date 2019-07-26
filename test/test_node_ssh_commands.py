@@ -27,12 +27,13 @@ class TestNodeSshCommands:
     def test_start(self, mocks):
         subject = NodeSshCommands(lambda: '1.2.3.4')
         node_args = {
-            'dns_servers': 'standard',
-            'log_level': 'debug',
-            'data_directory': '/tmp',
-            'ip': '1.2.3.4',
-            'wallet_address': '0xF00DFACE',
-            'additional_args': 'hi'
+            'dns-servers': '--dns-servers 1.1.1.1,8.8.8.8',
+            'log-level': '--log-level debug',
+            'data-directory': '--data-directory /tmp',
+            'ip': '--ip 1.2.3.4',
+            'earning-wallet': '--earning-wallet 0xF00DFACE',
+            'consuming-private-key': '--consuming-private-key 89d59b93ef6a94c977e1812b727d5f123f7d825ab636e83aad3e2845a68eaedb',
+            'additional-args': 'hi'
         }
         self.mock_executor.return_value.execute_sync.return_value = 'started'
 
@@ -40,7 +41,43 @@ class TestNodeSshCommands:
 
         self.mock_executor.return_value.execute_sync.assert_called_with([
             'ssh', '-oStrictHostKeyChecking=no', 'mockeduser@1.2.3.4',
-            node_commands.START_COMMAND % node_args
+            'sudo ./SubstratumNode',
+            '--dns-servers', '1.1.1.1,8.8.8.8',
+            '--log-level', 'debug',
+            '--data-directory', '/tmp',
+            '--ip', '1.2.3.4',
+            '--earning-wallet', '0xF00DFACE',
+            '--consuming-private-key', '89d59b93ef6a94c977e1812b727d5f123f7d825ab636e83aad3e2845a68eaedb',
+            'hi',
+            '>', '/dev/null', '2>&1', '&'
+        ])
+
+        assert result == 'started'
+
+    def test_start_no_additional_args(self, mocks):
+        subject = NodeSshCommands(lambda: '1.2.3.4')
+        node_args = {
+            'dns-servers': '--dns-servers 1.1.1.1,8.8.8.8',
+            'log-level': '--log-level debug',
+            'data-directory': '--data-directory /tmp',
+            'ip': '--ip 1.2.3.4',
+            'earning-wallet': '--earning-wallet 0xF00DFACE',
+            'consuming-private-key': '--consuming-private-key 89d59b93ef6a94c977e1812b727d5f123f7d825ab636e83aad3e2845a68eaedb',
+        }
+        self.mock_executor.return_value.execute_sync.return_value = 'started'
+
+        result = subject.start(node_args)
+
+        self.mock_executor.return_value.execute_sync.assert_called_with([
+            'ssh', '-oStrictHostKeyChecking=no', 'mockeduser@1.2.3.4',
+            'sudo ./SubstratumNode',
+            '--dns-servers', '1.1.1.1,8.8.8.8',
+            '--log-level', 'debug',
+            '--data-directory', '/tmp',
+            '--ip', '1.2.3.4',
+            '--earning-wallet', '0xF00DFACE',
+            '--consuming-private-key', '89d59b93ef6a94c977e1812b727d5f123f7d825ab636e83aad3e2845a68eaedb',
+            '>', '/dev/null', '2>&1', '&'
         ])
         assert result == 'started'
 
@@ -115,7 +152,7 @@ class TestNodeSshCommands:
 
         self.mock_terminal_executor.return_value.execute_in_new_terminal\
             .assert_called_with(
-                'ssh -oStrictHostKeyChecking=no mockeduser@1.2.3.4 %s' %
+                '1.2.3.4 ssh -oStrictHostKeyChecking=no mockeduser@1.2.3.4 %s' %
                 node_commands.TAIL_LOGS_COMMAND
             )
         assert result == 'tailing'
@@ -129,6 +166,6 @@ class TestNodeSshCommands:
 
         self.mock_terminal_executor.return_value.execute_in_new_terminal\
             .assert_called_with(
-                'ssh -oStrictHostKeyChecking=no mockeduser@1.2.3.4'
+                '1.2.3.4 ssh -oStrictHostKeyChecking=no mockeduser@1.2.3.4'
             )
         assert result == 'shell'

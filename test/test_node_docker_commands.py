@@ -24,9 +24,9 @@ class TestNodeDockerCommands:
         subject = NodeDockerCommands('bacon', lambda: '1.2.3.4')
         self.mock_executor.execute_async.return_value.expect.return_value = 1  # nonexistent
         node_args = {
-            'dns_servers': '--dns-servers 1.1.1.1',
-            'log_level': '--log-level trace',
-            'data_directory': '--data-directory /tmp'
+            'dns-servers': '--dns-servers 1.1.1.1',
+            'log-level': '--log-level trace',
+            'data-directory': '--data-directory /tmp'
         }
         self.mock_executor.execute_sync.return_value = 'success'
 
@@ -55,7 +55,8 @@ class TestNodeDockerCommands:
             '--log-level', 'trace',
             '--data-directory', '/tmp',
             '--ip', '1.2.3.4',
-            '--earning-wallet', '0x01020304010203040102030401020304EEEEEEEE'
+            '--earning-wallet', '0x01020304010203040102030401020304EEEEEEEE',
+            '--consuming-private-key', '89d59b93ef6a94c977e1812b727d5f123f7d825ab636e83aad3e2845a68eaedb'
         ])
 
         assert result == 'success'
@@ -64,10 +65,10 @@ class TestNodeDockerCommands:
         subject = NodeDockerCommands('bacon', lambda: '1.2.3.4')
         self.mock_executor.execute_async.return_value.expect.return_value = 0  # existing
         node_args = {
-            'dns_servers': '--dns-servers 1.1.1.2',
-            'log_level': '--log-level debug',
-            'data_directory': '--data-directory /tmp',
-            'additional_args': '--neighbors howdy'
+            'dns-servers': '--dns-servers 1.1.1.2',
+            'log-level': '--log-level debug',
+            'data-directory': '--data-directory /tmp',
+            'additional-args': '--neighbors howdy'
         }
         self.mock_executor.execute_sync.return_value = 'success'
 
@@ -101,6 +102,7 @@ class TestNodeDockerCommands:
                 '--data-directory', '/tmp',
                 '--ip', '1.2.3.4',
                 '--earning-wallet', '0x01020304010203040102030401020304EEEEEEEE',
+                '--consuming-private-key', '89d59b93ef6a94c977e1812b727d5f123f7d825ab636e83aad3e2845a68eaedb',
                 '--neighbors', 'howdy'
             ])
         ]
@@ -125,9 +127,7 @@ class TestNodeDockerCommands:
 
         result = subject.cat_logs()
 
-        self.mock_executor.execute_async.assert_called_with([
-            'docker', 'logs', 'bacon'
-        ])
+        self.mock_executor.execute_async.assert_called_with(["docker", "exec", "-it", "bacon", "cat", "/tmp/SubstratumNode.log"])
 
         assert result == 'meow'
 
@@ -158,7 +158,7 @@ class TestNodeDockerCommands:
 
         result = subject.tail()
 
-        self.mock_terminal_executor.return_value.execute_in_new_terminal.assert_called_with('\"bacon(1.2.3.4)\" docker logs -f bacon')
+        self.mock_terminal_executor.return_value.execute_in_new_terminal.assert_called_with('\"bacon(1.2.3.4)\" docker exec -it bacon tail -f -n 250 /tmp/SubstratumNode.log')
 
         assert result == 'tailing'
 
