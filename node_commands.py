@@ -2,11 +2,11 @@
 from abc import ABCMeta, abstractmethod
 
 
-SUBSTRATUM_NODE_LOG = "/tmp/SubstratumNode.log"
+SUBSTRATUM_NODE_LOG = "/tmp/SubstratumNode_rCURRENT.log"
 STOP_COMMAND = "pkill SubstratumNode"
-CAT_LOGS_COMMAND = "cat /tmp/SubstratumNode.log"
-TAIL_LOGS_COMMAND = "tail -f /tmp/SubstratumNode.log"
-DELETE_LOGS_COMMAND = "sudo rm -f /tmp/SubstratumNode.log"
+CAT_LOGS_COMMAND = "cat /tmp/SubstratumNode_rCURRENT.log"
+TAIL_LOGS_COMMAND = "tail -f /tmp/SubstratumNode_rCURRENT.log"
+DELETE_LOGS_COMMAND = "sudo rm -f /tmp/SubstratumNode*.log"
 
 
 class NodeCommands:

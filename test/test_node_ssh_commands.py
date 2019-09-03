@@ -125,7 +125,7 @@ class TestNodeSshCommands:
 
         self.mock_executor.return_value.execute_sync.assert_called_with([
             'scp', '-oStrictHostKeyChecking=no',
-            'mockeduser@1.2.3.4:/tmp/SubstratumNode.log',
+            'mockeduser@1.2.3.4:/tmp/SubstratumNode_rCURRENT.log',
             'dest'
         ])
         assert result == 'retrieved'

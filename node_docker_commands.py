@@ -27,7 +27,7 @@ class NodeDockerCommands(NodeCommands):
         return self.executor.execute_sync(["docker", "stop", "-t0", self.name])
 
     def cat_logs(self):
-        command = ["docker", "exec", "-it", self.name, "cat", "/tmp/SubstratumNode.log"]
+        command = ["docker", "exec", "-it", self.name, "cat", "/tmp/SubstratumNode_rCURRENT.log"]
         return self.executor.execute_async(command)
 
     def retrieve_logs(self, destination):
@@ -44,7 +44,7 @@ class NodeDockerCommands(NodeCommands):
         return 0
 
     def tail(self):
-        command = "\"{0}({1})\" docker exec -it {0} tail -f -n 250 /tmp/SubstratumNode.log".format(self.name,
+        command = "\"{0}({1})\" docker exec -it {0} tail -f -n 250 /tmp/SubstratumNode_rCURRENT.log".format(self.name,
                                                                                                    self.get_ip(),
                                                                                                    self.name)
         return self.terminal_executor.execute_in_new_terminal(command)

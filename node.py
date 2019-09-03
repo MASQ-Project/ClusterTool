@@ -86,7 +86,7 @@ class Node:
     @staticmethod
     def consuming_private_key(ip):
         keccak = sha3.keccak_256()
-        keccak.update(ip)
+        keccak.update(ip.encode('utf-8'))
         return keccak.hexdigest()
 
     @staticmethod

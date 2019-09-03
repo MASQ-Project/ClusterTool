@@ -127,7 +127,9 @@ class TestNodeDockerCommands:
 
         result = subject.cat_logs()
 
-        self.mock_executor.execute_async.assert_called_with(["docker", "exec", "-it", "bacon", "cat", "/tmp/SubstratumNode.log"])
+        self.mock_executor.execute_async.assert_called_with(
+            ["docker", "exec", "-it", "bacon", "cat", "/tmp/SubstratumNode_rCURRENT.log"]
+        )
 
         assert result == 'meow'
 
@@ -138,7 +140,7 @@ class TestNodeDockerCommands:
         result = subject.retrieve_logs('chicago')
 
         self.mock_executor.execute_sync.assert_called_with([
-            'docker', 'cp', 'bacon:/tmp/SubstratumNode.log', 'chicago'
+            'docker', 'cp', 'bacon:/tmp/SubstratumNode_rCURRENT.log', 'chicago'
         ])
 
         assert result == 'logs!'
@@ -158,7 +160,9 @@ class TestNodeDockerCommands:
 
         result = subject.tail()
 
-        self.mock_terminal_executor.return_value.execute_in_new_terminal.assert_called_with('\"bacon(1.2.3.4)\" docker exec -it bacon tail -f -n 250 /tmp/SubstratumNode.log')
+        self.mock_terminal_executor.return_value.execute_in_new_terminal.assert_called_with(
+            '\"bacon(1.2.3.4)\" docker exec -it bacon tail -f -n 250 /tmp/SubstratumNode_rCURRENT.log'
+        )
 
         assert result == 'tailing'
 

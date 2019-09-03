@@ -3,11 +3,14 @@ from __future__ import print_function
 from command import SelectCommand
 from tnt_config import INSTANCES
 
+
 def name():
     return 'start'
 
+
 def command():
     return SelectCommand(name(), _start_node, "starts SubstratumNode on")
+
 
 def _start_node(instance):
     node0 = None
