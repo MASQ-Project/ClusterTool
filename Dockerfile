@@ -1,5 +1,5 @@
 # Copyright (c) 2019, Substratum LLC (https://substratum.net) and/or its affiliates. All rights reserved.
-FROM debian:stable-slim
+FROM debian:buster-slim
 
 RUN apt-get update
 RUN apt-get install -y curl
