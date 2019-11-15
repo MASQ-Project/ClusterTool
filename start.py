@@ -9,7 +9,7 @@ def name():
 
 
 def command():
-    return SelectCommand(name(), _start_node, "starts SubstratumNode on")
+    return SelectCommand(name(), _start_node, "starts MASQNode on")
 
 
 def _start_node(instance):

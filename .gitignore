@@ -2,7 +2,7 @@
 *.swp
 *.swo
 graphviz/*
-SubstratumNode*
+MASQNode*
 dns_utility
 tnt_config.py
 .vscode

@@ -55,7 +55,7 @@ def _automated():
         if len(instance_lists[platform_idx]) == 0:
             platform_idx = platform_idx + 1
 
-        # TODO what if the instance is already running? maybe already has SubstratumNode running on it? (proposed `status` command can help with this)
+        # TODO what if the instance is already running? maybe already has MASQNode running on it? (proposed `status` command can help with this)
         instance = Instance(node_id, api)
         INSTANCES[instance.name] = instance
         print("Configured %s on %s (%s)" % (instance.name, api.name, api.__class__))

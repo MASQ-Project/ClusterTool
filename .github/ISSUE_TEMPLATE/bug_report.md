@@ -7,8 +7,8 @@ assignees: ''
 
 ---
 
-**SubstratumNode TNT Version**
-Need the full version of SubstratumNode TNT (e.g. SubstratumNode TNT 1.0.0)
+**MASQNode TNT Version**
+Need the full version of MASQNode TNT (e.g. MASQNode TNT 1.0.0)
 
 **Describe the bug**
 A clear and concise description of what the bug is.

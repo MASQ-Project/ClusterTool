@@ -31,7 +31,7 @@ class TestStart:
         real_command = subject.command()
 
         assert real_command.name == 'start'
-        assert real_command.info == 'starts SubstratumNode on'
+        assert real_command.info == 'starts MASQNode on'
 
     def test_command_with_node0(self, instances, mocker):
         mock_input = mocker.patch('__builtin__.raw_input')

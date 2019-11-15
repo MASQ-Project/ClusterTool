@@ -88,7 +88,7 @@ There is a note about this in `info.py` and it should probably be corrected.
 
 _Implemented in `update.py`_
 
-`update` is a SelectCommand that uploads new binaries for `SubstratumNode` and `dns_utility` to the instance(s) specified.
+`update` is a SelectCommand that uploads new binaries for `MASQNode` and `dns_utility` to the instance(s) specified.
 It currently looks for the binaries in the same directory as the TNT, and **be warned:** it is not graceful when they are not found.
 It will crash if the binaries are not found.
 
@@ -96,7 +96,7 @@ It will crash if the binaries are not found.
 
 _Implemented in `start.py`_
 
-`start` is a SelectCommand that starts SubstratumNode on the instance(s) you specify.
+`start` is a SelectCommand that starts MASQNode on the instance(s) you specify.
 
 The `node-0` node must always be started first.
 If you try to start any other node before `node-0`, `start` will complain.
@@ -106,10 +106,10 @@ However, it does not prevent you from starting any other node more than once.
 
 If nodes are started in an acceptable order, the `start` command will call the relevant `instance.py` function: `start_node` (sending in the `node-0` node descriptor).
 
-The first thing `start` does is remove any existing `SubstratumNode.log` file.
+The first thing `start` does is remove any existing `MASQNode.log` file.
 This is to ensure that the log will only contain the current node descriptor.
 
-Once the previous log is removed, SubstratumNode is started with the following parameters:
+Once the previous log is removed, MASQNode is started with the following parameters:
 - `--dns-servers 1.1.1.1`
 - `--log-level trace`
 - `--data-directory /tmp`
@@ -117,7 +117,7 @@ Once the previous log is removed, SubstratumNode is started with the following p
 - `--earning-wallet <fake address calculated from ip address>`
 - `--neighbors <neighbor descriptor>`
 
-Once SubstratumNode is started, `start` waits for the node descriptor to appear in the logs before completing.
+Once MASQNode is started, `start` waits for the node descriptor to appear in the logs before completing.
 This is particularly important for the `node-0` node, since all the other nodes will require its descriptor to start.
 
 ### daisy
@@ -159,14 +159,14 @@ _Implemented in `instance.py`_
 
 _Linux-only_
 
-`tail` is a SelectCommand that calls `tail -f` the `SubstratumNode.log` of the instance(s) specified in a new terminal window (per specified instance).
+`tail` is a SelectCommand that calls `tail -f` the `MASQNode.log` of the instance(s) specified in a new terminal window (per specified instance).
 
 ### subvert
 
 _Implemented in `instance.py`_
 
 `subvert` is a SelectCommand that subverts the DNS of the instance(s) specified.
-This means that any traffic originating from the instance(s) will be routed through the SubstratumNetwork;
+This means that any traffic originating from the instance(s) will be routed through the MASQ Network;
 it is equivalent to the `consuming` state in the GUI.
 
 ### curl
@@ -222,7 +222,7 @@ _Implemented in `instance.py`_
 
 `inspect` is a SelectCommand that retrieves the current state of the Neighborhood of the instance(s) specified,
 and opens a visual graph of the Neighborhood in an image viewer.
-It detects how many changes have happened in the Neighborhood by inspecting the `SubstratumNode.log` file of the instance,
+It detects how many changes have happened in the Neighborhood by inspecting the `MASQNode.log` file of the instance,
 and prompts you for which version you would like to see (until a blank line is entered).
 
 ### inbound
@@ -231,7 +231,7 @@ _Implemented in `instance.py`_
 
 `inbound` is a SelectCommand that retrieves the Neighborhood Gossip messages that the specified instance(s) has received,
 and opens a visual graph of the Gossip in an image viewer.
-It detects how many messages have been received by inspecting the `SubstratumNode.log` file of the instance,
+It detects how many messages have been received by inspecting the `MASQNode.log` file of the instance,
 and prompts you for which one you would like to see (until a blank line is entered).
 
 ### outbound
@@ -240,17 +240,17 @@ _Implemented in `instance.py`_
 
 `outbound` is a SelectCommand that retrieves the Neighborhood Gossip messages that the specified instance(s) has sent,
 and opens a visual graph of the Gossip in an image viewer.
-It detects how many messages have been sent by inspecting the `SubstratumNode.log` file of the instance,
+It detects how many messages have been sent by inspecting the `MASQNode.log` file of the instance,
 and prompts you for which one you would like to see (until a blank line is entered).
 
 ### stop
 
 _Implemented in `instance.py`_
 
-`stop` is a SelectCommand that shuts down SubstratumNode on the instance(s) specified.
+`stop` is a SelectCommand that shuts down MASQNode on the instance(s) specified.
 For each instance specified, It will:
 - revert DNS
-- kill the SubstratumNode process
+- kill the MASQNode process
 - kill any traffic (`wget` or `curl`) that was being generated
 - clear out any stale state (e.g. node descriptor) in the TNT instance
 
@@ -258,7 +258,7 @@ For each instance specified, It will:
 
 _Implemented in `finish.py`_
 
-`finish` is a regular Command that downloads the `SubstratumNode.log` for all instances into a local directory and calls `stop` on each instance.
+`finish` is a regular Command that downloads the `MASQNode.log` for all instances into a local directory and calls `stop` on each instance.
 It prompts for a directory name to put the logs into; it will accept a name that contains no spaces and does not already exist.
 If it receives invalid input, it will reprompt; a blank line will cancel the command.
 
@@ -272,7 +272,7 @@ _unix-only_
 
 _Implemented in `kill.py`_
 
-`kill` is a SelectCommand that shuts down the instance(s) specified -- not just SubstratumNode, but the whole instance.
+`kill` is a SelectCommand that shuts down the instance(s) specified -- not just MASQNode, but the whole instance.
 The instances that are shut down are removed from the INSTANCES structure and put back into their corresponding "available instances" list based on their platform.
 
 ### nfo

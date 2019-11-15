@@ -15,7 +15,7 @@ class NodeSshCommands(cmd.NodeCommands):
 
     def start(self, node_args):
         command = [
-            "sudo ./SubstratumNode",
+            "sudo ./MASQNode",
             "--dns-servers", node_args["dns-servers"].split(' ')[1],
             "--log-level", node_args["log-level"].split(' ')[1],
             "--data-directory", node_args["data-directory"].split(' ')[1],
@@ -47,7 +47,7 @@ class NodeSshCommands(cmd.NodeCommands):
     def retrieve_logs(self, destination):
         source = "%s@%s:%s" % (
             tnt_config.INSTANCE_USER, self.get_ip(),
-            cmd.SUBSTRATUM_NODE_LOG
+            cmd.MASQ_NODE_LOG
         )
         return self.executor.execute_sync(
             self._wrap_with_scp(source, destination)

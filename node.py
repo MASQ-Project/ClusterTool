@@ -57,8 +57,8 @@ class Node:
         self.descriptor = self._wait_for_descriptor()
 
     def retrieve_logs(self, to_dir):
-        print("\tRetrieving logs from %s instance (%s/SubstratumNode-%s.log)" % (self.name, to_dir, self.name))
-        self.node_commands.retrieve_logs("%s/SubstratumNode-%s.log" % (to_dir, self.name))
+        print("\tRetrieving logs from %s instance (%s/MASQNode-%s.log)" % (self.name, to_dir, self.name))
+        self.node_commands.retrieve_logs("%s/MASQNode-%s.log" % (to_dir, self.name))
         print("\tdone.")
         
     def shell(self):
@@ -140,11 +140,11 @@ class Node:
         print("\t\tWaiting for node info...")
 
         p = self.node_commands.cat_logs()
-        idx = p.expect(['.*SubstratumNode local descriptor: (.+)[\t\r\n\v\f ]', pexpect.EOF], timeout=None)
+        idx = p.expect(['.*MASQNode local descriptor: (.+)[\t\r\n\v\f ]', pexpect.EOF], timeout=None)
 
         while idx != 0:
             p = self.node_commands.cat_logs()
-            idx = p.expect(['.*SubstratumNode local descriptor: (.+)[\t\r\n\v\f ]', pexpect.EOF], timeout=None)
+            idx = p.expect(['.*MASQNode local descriptor: (.+)[\t\r\n\v\f ]', pexpect.EOF], timeout=None)
 
         descriptor = p.match.group(1).split('\r')[0].strip()
         print("\t\tdone.")

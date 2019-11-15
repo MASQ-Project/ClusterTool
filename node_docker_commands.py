@@ -27,14 +27,14 @@ class NodeDockerCommands(NodeCommands):
         return self.executor.execute_sync(["docker", "stop", "-t0", self.name])
 
     def cat_logs(self):
-        command = ["docker", "exec", "-it", self.name, "cat", "/tmp/SubstratumNode_rCURRENT.log"]
+        command = ["docker", "exec", "-it", self.name, "cat", "/tmp/MASQNode_rCURRENT.log"]
         return self.executor.execute_async(command)
 
     def retrieve_logs(self, destination):
         args = [
             "docker",
             "cp",
-            "%s:%s" % (self.name, SUBSTRATUM_NODE_LOG),
+            "%s:%s" % (self.name, MASQ_NODE_LOG),
             destination,
         ]
         return self.executor.execute_sync(args)
@@ -44,7 +44,7 @@ class NodeDockerCommands(NodeCommands):
         return 0
 
     def tail(self):
-        command = "\"{0}({1})\" docker exec -it {0} tail -f -n 250 /tmp/SubstratumNode_rCURRENT.log".format(self.name,
+        command = "\"{0}({1})\" docker exec -it {0} tail -f -n 250 /tmp/MASQNode_rCURRENT.log".format(self.name,
                                                                                                    self.get_ip(),
                                                                                                    self.name)
         return self.terminal_executor.execute_in_new_terminal(command)
@@ -69,7 +69,7 @@ class NodeDockerCommands(NodeCommands):
             "--net", "test_net",
             "--volume", volume,
             "test_net_tools",
-            "/node_root/node/SubstratumNode",
+            "/node_root/node/MASQNode",
             "--dns-servers", node_args["dns-servers"].split(' ')[1],
             "--log-level", node_args["log-level"].split(' ')[1],
             "--data-directory", node_args["data-directory"].split(' ')[1],

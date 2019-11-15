@@ -42,7 +42,7 @@ class TestNode:
         ]
 
         self.mock_node_commands.delete_logs.assert_called_with()
-        self.mock_node_commands.cat_logs.return_value.expect.assert_called_with(['.*SubstratumNode local descriptor: (.+)[\t\r\n\v\f ]', pexpect.EOF], timeout=None)
+        self.mock_node_commands.cat_logs.return_value.expect.assert_called_with(['.*MASQNode local descriptor: (.+)[\t\r\n\v\f ]', pexpect.EOF], timeout=None)
         self.mock_node_commands.cat_logs.return_value.match.group.assert_called_with(1)
         self.mock_node_commands.cat_logs.return_value.match.group.return_value.split.assert_called_with('\r')
         self.mock_node_commands.start.assert_called_with({
@@ -73,7 +73,7 @@ class TestNode:
         ]
 
         self.mock_node_commands.delete_logs.assert_called_with()
-        self.mock_node_commands.cat_logs.return_value.expect.assert_called_with(['.*SubstratumNode local descriptor: (.+)[\t\r\n\v\f ]', pexpect.EOF], timeout=None)
+        self.mock_node_commands.cat_logs.return_value.expect.assert_called_with(['.*MASQNode local descriptor: (.+)[\t\r\n\v\f ]', pexpect.EOF], timeout=None)
         self.mock_node_commands.cat_logs.return_value.match.group.assert_called_with(1)
         self.mock_node_commands.cat_logs.return_value.match.group.return_value.split.assert_called_with('\r')
         self.mock_node_commands.start.assert_called_with({
@@ -126,7 +126,7 @@ class TestNode:
         self.mock_node_commands.stop.assert_called_with()
         assert subject.descriptor == ''
         assert self.mock_node_commands.update.mock_calls == [
-            mocker.call("SubstratumNode"),
+            mocker.call("MASQNode"),
             mocker.call("dns_utility")
         ]
 
@@ -154,10 +154,10 @@ class TestNode:
         subject.retrieve_logs("to_dir")
 
         assert self.mock_print.mock_calls == [
-            mocker.call('\tRetrieving logs from booga instance (to_dir/SubstratumNode-booga.log)'),
+            mocker.call('\tRetrieving logs from booga instance (to_dir/MASQNode-booga.log)'),
             mocker.call('\tdone.')
         ]
-        self.mock_node_commands.retrieve_logs.assert_called_with('to_dir/SubstratumNode-booga.log')
+        self.mock_node_commands.retrieve_logs.assert_called_with('to_dir/MASQNode-booga.log')
 
     def test_shell(self, node_commands):
         subject = Node('booga', self.mock_node_commands)

@@ -41,7 +41,7 @@ class TestNodeSshCommands:
 
         self.mock_executor.return_value.execute_sync.assert_called_with([
             'ssh', '-oStrictHostKeyChecking=no', 'mockeduser@1.2.3.4',
-            'sudo ./SubstratumNode',
+            'sudo ./MASQNode',
             '--dns-servers', '1.1.1.1,8.8.8.8',
             '--log-level', 'debug',
             '--data-directory', '/tmp',
@@ -70,7 +70,7 @@ class TestNodeSshCommands:
 
         self.mock_executor.return_value.execute_sync.assert_called_with([
             'ssh', '-oStrictHostKeyChecking=no', 'mockeduser@1.2.3.4',
-            'sudo ./SubstratumNode',
+            'sudo ./MASQNode',
             '--dns-servers', '1.1.1.1,8.8.8.8',
             '--log-level', 'debug',
             '--data-directory', '/tmp',
@@ -125,7 +125,7 @@ class TestNodeSshCommands:
 
         self.mock_executor.return_value.execute_sync.assert_called_with([
             'scp', '-oStrictHostKeyChecking=no',
-            'mockeduser@1.2.3.4:/tmp/SubstratumNode_rCURRENT.log',
+            'mockeduser@1.2.3.4:/tmp/MASQNode_rCURRENT.log',
             'dest'
         ])
         assert result == 'retrieved'

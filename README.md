@@ -19,7 +19,7 @@ sudo apt-get install graphviz
 ```
 
 _If you want to be able to update the binaries the instances run via the TNT,_
-_run the TNT script from a directory that has a `binaries` directory with `SubstratumNode` and `dns_utility` executables_
+_run the TNT script from a directory that has a `binaries` directory with `MASQNode` and `dns_utility` executables_
 _in it._
 
 Create your own modifiable version of `tnt_config.py` based off of `tnt_config_template.py`.
