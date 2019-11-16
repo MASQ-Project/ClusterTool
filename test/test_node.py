@@ -42,7 +42,7 @@ class TestNode:
         ]
 
         self.mock_node_commands.delete_logs.assert_called_with()
-        self.mock_node_commands.cat_logs.return_value.expect.assert_called_with(['.*MASQNode local descriptor: (.+)[\t\r\n\v\f ]', pexpect.EOF], timeout=None)
+        self.mock_node_commands.cat_logs.return_value.expect.assert_called_with(['.*MASQ Node local descriptor: (.+)[\t\r\n\v\f ]', pexpect.EOF], timeout=None)
         self.mock_node_commands.cat_logs.return_value.match.group.assert_called_with(1)
         self.mock_node_commands.cat_logs.return_value.match.group.return_value.split.assert_called_with('\r')
         self.mock_node_commands.start.assert_called_with({
@@ -73,7 +73,7 @@ class TestNode:
         ]
 
         self.mock_node_commands.delete_logs.assert_called_with()
-        self.mock_node_commands.cat_logs.return_value.expect.assert_called_with(['.*MASQNode local descriptor: (.+)[\t\r\n\v\f ]', pexpect.EOF], timeout=None)
+        self.mock_node_commands.cat_logs.return_value.expect.assert_called_with(['.*MASQ Node local descriptor: (.+)[\t\r\n\v\f ]', pexpect.EOF], timeout=None)
         self.mock_node_commands.cat_logs.return_value.match.group.assert_called_with(1)
         self.mock_node_commands.cat_logs.return_value.match.group.return_value.split.assert_called_with('\r')
         self.mock_node_commands.start.assert_called_with({

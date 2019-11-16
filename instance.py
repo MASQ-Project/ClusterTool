@@ -13,6 +13,7 @@ class Instance:
         self.dns = self.instance_api.dns
         self.traffic = self.instance_api.traffic
         self.node = self.instance_api.node
+        self.attributes = {}
 
     def start(self):
         self.instance_api.start_instance()

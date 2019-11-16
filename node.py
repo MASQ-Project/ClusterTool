@@ -140,11 +140,11 @@ class Node:
         print("\t\tWaiting for node info...")
 
         p = self.node_commands.cat_logs()
-        idx = p.expect(['.*MASQNode local descriptor: (.+)[\t\r\n\v\f ]', pexpect.EOF], timeout=None)
+        idx = p.expect(['.*MASQ Node local descriptor: (.+)[\t\r\n\v\f ]', pexpect.EOF], timeout=None)
 
         while idx != 0:
             p = self.node_commands.cat_logs()
-            idx = p.expect(['.*MASQNode local descriptor: (.+)[\t\r\n\v\f ]', pexpect.EOF], timeout=None)
+            idx = p.expect(['.*MASQ Node local descriptor: (.+)[\t\r\n\v\f ]', pexpect.EOF], timeout=None)
 
         descriptor = p.match.group(1).split('\r')[0].strip()
         print("\t\tdone.")

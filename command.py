@@ -65,9 +65,15 @@ class SelectCommand:
         return self._cleanse_input(the_input)
 
     def _cleanse_input(self, the_input):
+        names = self._split_input(the_input)
+        return self._cleanse_names(names)
+
+    def _split_input(self, the_input):
         names = the_input.strip().split(' ')
         # eliminate extra inner whitespace and filter out empty strings
-        names = [name.strip() for name in names if name != '']
+        return [name.strip() for name in names if name != '']
+
+    def _cleanse_names(self, names):
         # eliminate duplicate names
         names = set(names)
         # check for unknown instances
@@ -75,7 +81,6 @@ class SelectCommand:
             if name not in INSTANCES.keys() and name != 'all':
                 print("\tno known instance called %s" % name)
                 return []
-
         return names
 
     def _choose_and_run(self, fn):
@@ -96,3 +101,37 @@ class SelectCommand:
     def _run_for_all(self, fn, instance_names):
         for instance_name in sorted(instance_names):
             fn(INSTANCES[instance_name])
+
+
+class SetCommand(SelectCommand):
+    def __init__(self):
+        SelectCommand.__init__(self, "set", lambda: 0, "sets attributes on a Node before it is started")
+
+    def display(self):
+        print(
+            "%s> Prompts for instance name then sets an attribute on the instance(s) specified" %
+            "\t{0:-<18}".format(self.name)
+        )
+
+    def run(self):
+        print("run Usage: set <attribute> <value> [ <instance> [ <instance> ... ] ]")
+
+    def run_for(self, the_input):
+        input_words = self._split_input(the_input)
+        if len(input_words) < 2:
+            print("run_for Usage: set <attribute> <value> [ <instance> [ <instance> ... ] ]")
+            return
+        attribute = input_words.pop(0)
+        value = input_words.pop(0)
+        names = self._cleanse_names(input_words)
+        fn = lambda instance: self._set_attribute(attribute, value, instance)
+        if len(names) == 0:
+            self._choose_and_run(fn)
+
+        if 'all' in names:
+            names = INSTANCES.keys()
+
+        self._run_for_all(fn, names)
+
+    def _set_attribute(self, attribute, value, instance):
+        instance.attributes[attribute] = value
