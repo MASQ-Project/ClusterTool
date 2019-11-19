@@ -2,9 +2,11 @@
 import pytest
 from command import SetCommand
 
+
 class InstanceForTest:
     def __init__(self):
         self.attributes = {}
+
 
 class TestSetCommand:
     def setup_method(self, method):
@@ -34,8 +36,6 @@ class TestSetCommand:
         mock_input = mocker.patch('__builtin__.raw_input')
         mock_input.side_effect = ['first', '']
 
-        def run_for(whom):
-            ran_for.append(whom)
         subject = SetCommand()
 
         subject.run_for('attribute value')

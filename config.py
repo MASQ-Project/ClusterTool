@@ -24,9 +24,7 @@ COMMANDS = {
     help.name(): help.command(),
     daisy.name(): daisy.command(),
     cluster.name(): cluster.command(),
-    # TODO SPIKE
     'set': SetCommand(),
-    # TODO SPIKE
 
     # TODO status command (finds out which instances are running (checks all platforms), for running instances, determines if node is running on them, if they are subverted, etc)
     # it should not load this state into INSTANCES automatically (multiple pairs could be using different cloud instances, so this should enable coordination)
