@@ -17,7 +17,7 @@ class TestTrafficHandler:
     def test_init(self):
         subject = TrafficHandler('snow', 'commands')
 
-        assert subject.name == 'snow'
+        assert subject.machine_name() == 'snow'
         assert subject.traffic_commands == 'commands'
         assert subject.traffic_handles == []
 

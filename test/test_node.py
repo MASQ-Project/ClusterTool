@@ -21,7 +21,7 @@ class TestNode:
     def test_init(self):
         subject = Node('booga', 'node_commands')
 
-        assert subject.name == 'booga'
+        assert subject.machine_name() == 'booga'
         assert subject.node_commands == 'node_commands'
         assert subject.descriptor == ''
 
@@ -33,7 +33,7 @@ class TestNode:
         real_descriptor = subject.start('1.2.3.4', 'neighbor_descriptor')
 
         assert self.mock_print.mock_calls == [
-            mocker.call('\tstarting node booga...'),
+            mocker.call('\tstarting debut node booga...'),
             mocker.call('\tdeleting previous log on booga...'),
             mocker.call('\tdone.'),
             mocker.call('\t\tWaiting for node info...'),
@@ -64,7 +64,7 @@ class TestNode:
         real_descriptor = subject.start('1.2.3.4', "")
 
         assert self.mock_print.mock_calls == [
-            mocker.call('\tstarting node booga...'),
+            mocker.call('\tstarting initial node booga...'),
             mocker.call('\tdeleting previous log on booga...'),
             mocker.call('\tdone.'),
             mocker.call('\t\tWaiting for node info...'),

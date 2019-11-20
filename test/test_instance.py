@@ -9,7 +9,7 @@ class TestInstance:
         self.subject = Instance(1, mocker.Mock(autospec=True))
 
     def test_init(self, subject):
-        assert self.subject.name == 'node-1'
+        assert self.subject.index_name() == 'node-1'
 
     def test_start(self, subject):
         result = self.subject.start()

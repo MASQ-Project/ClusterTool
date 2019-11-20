@@ -265,7 +265,7 @@ class TestInit:
             mocker.call().strip()
         ]
 
-        assert subject.INSTANCES['node-0'].name == 'node-0'
+        assert subject.INSTANCES['node-0'].index_name() == 'node-0'
         assert len(subject.COMPUTE_INSTANCES) == 1
         assert len(subject.EC2_INSTANCES) == 2
 

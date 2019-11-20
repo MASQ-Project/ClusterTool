@@ -16,7 +16,7 @@ class TestDns:
     def test_construction(self):
         subject = Dns('nodename', 'commands')
 
-        assert subject.name == 'nodename'
+        assert subject.machine_name() == 'nodename'
         assert subject.dns_commands == 'commands'
         assert subject.dns_status == ''
 

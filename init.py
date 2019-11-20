@@ -57,8 +57,8 @@ def _automated():
 
         # TODO what if the instance is already running? maybe already has MASQNode running on it? (proposed `status` command can help with this)
         instance = Instance(node_id, api)
-        INSTANCES[instance.name] = instance
-        print("Configured %s on %s (%s)" % (instance.name, api.name, api.__class__))
+        INSTANCES[instance.index_name()] = instance
+        print("Configured %s on %s (%s)" % (instance.index_name(), api.name, api.__class__))
 
 
 def _determine_id():

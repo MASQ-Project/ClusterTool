@@ -6,34 +6,44 @@ from graphviz import Source
 import instance
 import sha3
 
+from tnt_config import INSTANCES
+
+
 class Node:
-    def __init__(self, name, node_commands):
-        self.name = name
+    def __init__(self, machine_name, node_commands):
+        self._machine_name = machine_name
         self.node_commands = node_commands
         self.descriptor = ""
+        self.instance = None
+
+    def machine_name(self):
+        return self._machine_name
 
     def start(self, ip, neighbor_info):
         if self.descriptor != "":
-            print("it looks like node is already running on %s" % self.name)
-        elif neighbor_info == "":
-            print("\tstarting node %s..." % self.name)
+            print("it looks like node is already running on %s" % self.machine_name())
+            return self.descriptor
+        # print("\nINSTANCES.keys: %s\n", INSTANCES.keys())
+        # self.instance = INSTANCES[self.machine_name]
+        if neighbor_info == "":
+            print("\tstarting initial node %s..." % self.machine_name())
             self._start_node_with(ip)
             print("\tnode running: %s" % self.descriptor)
         else:
-            print("\tstarting node %s..." % self.name)
+            print("\tstarting debut node %s..." % self.machine_name())
             self._start_node_with(ip, "--neighbors %s" % neighbor_info)
             print("\tnode running: %s" % self.descriptor)
         return self.descriptor
 
     def shutdown(self):
-        print("\tshutting down node on %s..." % self.name)
+        print("\tshutting down node on %s..." % self.machine_name())
         self.node_commands.stop()
         self.descriptor = ""
         print("\tdone.")
 
     def update(self):
         self.shutdown()
-        print("\tSending updated binaries to %s instance" % self.name)
+        print("\tSending updated binaries to %s instance" % self.machine_name())
         for executable in instance.BINARIES:
             return_code = self.node_commands.update(executable)
             if return_code != 0:
@@ -57,15 +67,15 @@ class Node:
         self.descriptor = self._wait_for_descriptor()
 
     def retrieve_logs(self, to_dir):
-        print("\tRetrieving logs from %s instance (%s/MASQNode-%s.log)" % (self.name, to_dir, self.name))
-        self.node_commands.retrieve_logs("%s/MASQNode-%s.log" % (to_dir, self.name))
+        print("\tRetrieving logs from %s instance (%s/MASQNode-%s.log)" % (self.machine_name(), to_dir, self.machine_name()))
+        self.node_commands.retrieve_logs("%s/MASQNode-%s.log" % (to_dir, self.machine_name()))
         print("\tdone.")
         
     def shell(self):
         self.node_commands.shell()
 
     def tail(self):
-        print("\tattempting to tail logs on %s" % self.name)
+        print("\tattempting to tail logs on %s" % self.machine_name())
         self.node_commands.tail()
         print("\tdone")
 
@@ -112,7 +122,7 @@ class Node:
             print("\tCould not find any logs about %s" % prompt_message)
             return
 
-        print("\tThere were %i logs about %s for %s." % (len(matches), prompt_message, self.name))
+        print("\tThere were %i logs about %s for %s." % (len(matches), prompt_message, self.machine_name()))
 # TODO move all user interaction stuff out into command files.
         while True:
             user_input = raw_input("\tWhich one do you want to see (1-%i)? (blank line to cancel) " % len(matches)).strip()
@@ -129,10 +139,10 @@ class Node:
                 print("\n\tInvalid input '%s', please use (1-%i). " % (user_input, len(matches)))
                 continue
 
-            Source(matches[idx].group('dot_graph'), directory="graphviz", filename="%s-%s-%i" % (self.name, filename, idx+1), format="png").view()
+            Source(matches[idx].group('dot_graph'), directory="graphviz", filename="%s-%s-%i" % (self.machine_name(), filename, idx+1), format="png").view()
 
     def _delete_existing_log(self):
-        print("\tdeleting previous log on %s..." % self.name)
+        print("\tdeleting previous log on %s..." % self.machine_name())
         self.node_commands.delete_logs()
         print("\tdone.")
 
