@@ -24,14 +24,7 @@ class Node:
         if self.descriptor != "":
             print("it looks like node is already running on %s" % self.machine_name())
             return self.descriptor
-
-        # TODO SPIKE
-        matching_instances = filter(lambda i: i.machine_name() == self.machine_name(), tnt_config.INSTANCES.values())
-        if len(matching_instances) != 1:
-            sys.exit("There should have been exactly one instance named %s, not %s" % (self.machine_name(), len(matching_instances)))
-        self.instance = matching_instances[0]
-        # TODO SPIKE
-
+        self.instance = self._find_matching_instance()
         if neighbor_info == "":
             print("\tstarting initial node %s..." % self.machine_name())
             self._start_node_with(ip)
@@ -56,6 +49,12 @@ class Node:
             if return_code != 0:
                 print("*** scp failed with code %s ***" % return_code)
         print("\tdone.")
+
+    def _find_matching_instance(self):
+        matching_instances = filter(lambda i: i.machine_name() == self.machine_name(), tnt_config.INSTANCES.values())
+        if len(matching_instances) != 1:
+            sys.exit("There should have been exactly one instance named %s, not %s" % (self.machine_name(), len(matching_instances)))
+        return matching_instances[0]
 
     def _start_node_with(self, ip, arg_str=None):
         # ensure the first descriptor match will be the current running node

@@ -95,6 +95,8 @@ class TestNode:
             'consuming-private-key': '--consuming-private-key 89d59b93ef6a94c977e1812b727d5f123f7d825ab636e83aad3e2845a68eaedb',
         })
         assert real_descriptor == 'descriptor'
+        assert subject.instance.index_name() == 'node-0'
+        assert subject.machine_name() == 'booga'
 
     def test_start_when_already_started(self, node_commands, printing, mocker):
         subject = Node('booga', self.mock_node_commands)
