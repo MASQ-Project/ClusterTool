@@ -15,44 +15,45 @@ from dns import Dns
 
 class VirtualBoxManage(InstanceApi):
 
+    _machine_name = None
     node = None
     dns = None
     traffic = None
 
-    def __init__(self, name):
+    def __init__(self, machine_name):
         self.ip_pattern = re.compile(r".*value: (.+), time.*")
         self.command = "VBoxManage"
         self.ip = ""
-        self.name = name
-        self.node = Node(name, NodeSshCommands(self.get_external_ip))
-        self.dns = Dns(name, DnsSshCommands(self.get_external_ip))
+        self._machine_name = machine_name
+        self.node = Node(machine_name, NodeSshCommands(self.get_external_ip))
+        self.dns = Dns(machine_name, DnsSshCommands(self.get_external_ip))
         self.traffic = TrafficHandler(
-            name, TrafficSshCommands(self.get_external_ip)
+            machine_name, TrafficSshCommands(self.get_external_ip)
         )
 
     def start_instance(self):
-        print('\tStarting %s local instance' % self.name)
-        sp.call([self.command, "startvm", self.name, "--type", "headless"])
+        print('\tStarting %s local instance' % self.machine_name())
+        sp.call([self.command, "startvm", self.machine_name(), "--type", "headless"])
 
     def stop_instance(self):
-        print('\tStopping %s local instance' % self.name)
-        sp.call([self.command, "controlvm", self.name, "poweroff"])
+        print('\tStopping %s local instance' % self.machine_name())
+        sp.call([self.command, "controlvm", self.machine_name(), "poweroff"])
 
     def restart_instance(self):
-        print('\tRestarting %s local instance' % self.name)
-        sp.call([self.command, "controlvm", self.name, "reset"])
+        print('\tRestarting %s local instance' % self.machine_name())
+        sp.call([self.command, "controlvm", self.machine_name(), "reset"])
 
     def get_external_ip(self):
         if self.ip == "":
             print(
                 "\t\tWaiting for external IP for %s local instance..." %
-                self.name
+                self.machine_name()
             )
             while True:
                 p = pexpect.spawn(self.command, [
                     "guestproperty",
                     "enumerate",
-                    self.name,
+                    self.machine_name(),
                     "get",
                     "/VirtualBox/GuestInfo/Net/0/V4/IP"
                 ])

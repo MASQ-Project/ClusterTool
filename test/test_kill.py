@@ -13,7 +13,7 @@ class TestKill:
     @pytest.fixture
     def neighbor(self, mocker):
         self.mock_instance = mocker.Mock()
-        self.mock_instance.name = 'node-0'
+        self.mock_instance.index_name = mocker.Mock(return_value='node-0')
         instance_dict = {'node-0': self.mock_instance}
         mocker.patch.object(subject, 'INSTANCES', instance_dict)
         mocker.patch.object(command, 'INSTANCES', instance_dict)

@@ -9,7 +9,7 @@ class TestNfo:
     @pytest.fixture
     def instance(self, mocker):
         self.mock_instance = mocker.Mock(autospec=True)
-        self.mock_instance.name = 'node-0'
+        self.mock_instance._index_name = 'node-0'
         instance_dict = {'node-0': self.mock_instance}
         mocker.patch.object(command, 'INSTANCES', instance_dict)
 

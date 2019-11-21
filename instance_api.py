@@ -5,6 +5,9 @@ from abc import ABCMeta, abstractmethod, abstractproperty
 class InstanceApi:
     __metaclass__ = ABCMeta
 
+    def machine_name(self):
+        return self._machine_name
+
     def getnode(self): raise NotImplementedError
 
     def setnode(self, value): raise NotImplementedError

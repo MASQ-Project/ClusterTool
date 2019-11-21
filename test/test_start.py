@@ -18,9 +18,9 @@ class TestStart:
     @pytest.fixture
     def command_instances(self, mocker):
         self.mock_node0 = mocker.Mock(autospec=True)
-        self.mock_node0.name = 'node-0'
+        self.mock_node0.index_name = mocker.Mock(return_value='node-0')
         self.mock_other_instance = mocker.Mock(autospec=True)
-        self.mock_other_instance.name = 'other'
+        self.mock_other_instance.index_name = mocker.Mock(return_value='other')
         instance_dict = {'node-0': self.mock_node0, 'other': self.mock_other_instance}
         mocker.patch.object(command, 'INSTANCES', instance_dict)
 

@@ -8,6 +8,7 @@ BINARIES = [
 class Instance:
     def __init__(self, node_id, instance_api):
         self._index_name = make_index_name(node_id)
+        self._machine_name = instance_api.machine_name()
         self.node_id = node_id
         self.instance_api = instance_api
         self.dns = self.instance_api.dns
@@ -27,6 +28,9 @@ class Instance:
 
     def index_name(self):
         return self._index_name
+
+    def machine_name(self):
+        return self._machine_name
 
     def get_ip(self):
         return self.instance_api.get_external_ip()

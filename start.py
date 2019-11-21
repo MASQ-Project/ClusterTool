@@ -16,10 +16,10 @@ def _start_node(instance):
     node0 = None
     if 'node-0' in INSTANCES.keys():
         node0 = INSTANCES['node-0']
-    if instance.name != 'node-0' and node0 is not None and node0.node.descriptor != "":
+    if instance.index_name() != 'node-0' and node0 is not None and node0.node.descriptor != "":
         instance.start_node(node0.node.descriptor)
-    elif instance.name == 'node-0' and node0 is not None and node0.node.descriptor == "":
+    elif instance.index_name() == 'node-0' and node0 is not None and node0.node.descriptor == "":
         instance.start_node()
     else:
-        print("FAILED TO START %s: did you forget about node-0?" % instance.name)
+        print("FAILED TO START %s: did you forget about node-0?" % instance.index_name())
         print("\t(if you are trying to start node-0, this means it may already be running)")

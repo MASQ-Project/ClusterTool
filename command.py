@@ -47,14 +47,14 @@ class SelectCommand:
         self._choose_and_run(self.sub_fn)
 
     def run_for(self, the_input):
-        names = self._cleanse_input(the_input)
-        if len(names) == 0:
+        index_names = self._cleanse_input(the_input)
+        if len(index_names) == 0:
             self.run()
 
-        if 'all' in names:
-            names = INSTANCES.keys()
+        if 'all' in index_names:
+            index_names = INSTANCES.keys()
 
-        self._run_for_all(self.sub_fn, names)
+        self._run_for_all(self.sub_fn, index_names)
 
     def _choose_instances(self):
         the_input = raw_input("\t%s: choose from %s (space-delimited) or 'all' (blank line to cancel): " % (self.name, sorted(INSTANCES.keys()))).strip()
@@ -69,38 +69,38 @@ class SelectCommand:
         return self._cleanse_names(names)
 
     def _split_input(self, the_input):
-        names = the_input.strip().split(' ')
+        index_names = the_input.strip().split(' ')
         # eliminate extra inner whitespace and filter out empty strings
-        return [name.strip() for name in names if name != '']
+        return [index_name.strip() for index_name in index_names if index_name != '']
 
-    def _cleanse_names(self, names):
+    def _cleanse_names(self, index_names):
         # eliminate duplicate names
-        names = set(names)
+        index_names = set(index_names)
         # check for unknown instances
-        for name in names:
-            if name not in INSTANCES.keys() and name != 'all':
-                print("\tno known instance called %s" % name)
+        for index_name in index_names:
+            if index_name not in INSTANCES.keys() and index_name != 'all':
+                print("\tno known instance called %s" % index_name)
                 return []
-        return names
+        return index_names
 
     def _choose_and_run(self, fn):
         while True:
-            names = self._choose_instances()
-            if '' in names:
+            index_names = self._choose_instances()
+            if '' in index_names:
                 return
 
             to_return = False
-            if 'all' in names:
-                names = INSTANCES.keys()
+            if 'all' in index_names:
+                index_names = INSTANCES.keys()
                 to_return = True
 
-            self._run_for_all(fn, names)
+            self._run_for_all(fn, index_names)
             if to_return:
                 return
 
-    def _run_for_all(self, fn, instance_names):
-        for instance_name in sorted(instance_names):
-            fn(INSTANCES[instance_name])
+    def _run_for_all(self, fn, index_names):
+        for index_name in sorted(index_names):
+            fn(INSTANCES[index_name])
 
 
 class SetCommand(SelectCommand):

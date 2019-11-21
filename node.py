@@ -1,12 +1,13 @@
 # Copyright (c) 2019, Substratum LLC (https://substratum.net) and/or its affiliates. All rights reserved.
 from __future__ import print_function
 import re
+import sys
+
 import pexpect
 from graphviz import Source
 import instance
 import sha3
-
-from tnt_config import INSTANCES
+import tnt_config
 
 
 class Node:
@@ -23,8 +24,14 @@ class Node:
         if self.descriptor != "":
             print("it looks like node is already running on %s" % self.machine_name())
             return self.descriptor
-        # print("\nINSTANCES.keys: %s\n", INSTANCES.keys())
-        # self.instance = INSTANCES[self.machine_name]
+
+        # TODO SPIKE
+        matching_instances = filter(lambda i: i.machine_name() == self.machine_name(), tnt_config.INSTANCES.values())
+        if len(matching_instances) != 1:
+            sys.exit("There should have been exactly one instance named %s, not %s" % (self.machine_name(), len(matching_instances)))
+        self.instance = matching_instances[0]
+        # TODO SPIKE
+
         if neighbor_info == "":
             print("\tstarting initial node %s..." % self.machine_name())
             self._start_node_with(ip)

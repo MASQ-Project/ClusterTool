@@ -30,11 +30,11 @@ def _init():
 
 def _print_available_instance_info():
     print("\nAvailable configured cloud instances:")
-    print("\tGoogle: %s" % [it.name for it in COMPUTE_INSTANCES])
-    print("\tAmazon: %s" % [it.name for it in EC2_INSTANCES])
+    print("\tGoogle: %s" % [it.machine_name() for it in COMPUTE_INSTANCES])
+    print("\tAmazon: %s" % [it.machine_name() for it in EC2_INSTANCES])
     print("\nAvailable configured local instances (probably cannot be used alongside above):")
-    print("\tVirtualBox: %s\n" % [it.name for it in VIRTUALBOX_INSTANCES])
-    print("\tDocker: %s\n" % [it.name for it in DOCKER_INSTANCES])
+    print("\tVirtualBox: %s\n" % [it.machine_name() for it in VIRTUALBOX_INSTANCES])
+    print("\tDocker: %s\n" % [it.machine_name() for it in DOCKER_INSTANCES])
 
 
 def _automated():
@@ -58,7 +58,7 @@ def _automated():
         # TODO what if the instance is already running? maybe already has MASQNode running on it? (proposed `status` command can help with this)
         instance = Instance(node_id, api)
         INSTANCES[instance.index_name()] = instance
-        print("Configured %s on %s (%s)" % (instance.index_name(), api.name, api.__class__))
+        print("Configured %s on %s (%s)" % (instance.index_name(), api.machine_name(), api.__class__))
 
 
 def _determine_id():

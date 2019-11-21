@@ -1,5 +1,7 @@
 # Copyright (c) 2019, Substratum LLC (https://substratum.net) and/or its affiliates. All rights reserved.
 import pytest
+
+import tnt_config
 from node import Node
 import pexpect
 
@@ -18,7 +20,7 @@ class TestNode:
     def graphviz(self, mocker):
         self.mock_graphviz = mocker.patch('node.Source', autospec=True)
 
-    def test_init(self):
+    def test_init(self, mocker):
         subject = Node('booga', 'node_commands')
 
         assert subject.machine_name() == 'booga'
@@ -26,6 +28,10 @@ class TestNode:
         assert subject.descriptor == ''
 
     def test_start_standard_node_wait_for_descriptor(self, node_commands, printing, mocker):
+        one_mock_instance = mocker.Mock()
+        one_mock_instance.machine_name = mocker.Mock(return_value='booga')
+        one_mock_instance.index_name = mocker.Mock(return_value='node-0')
+        tnt_config.INSTANCES = {'booga': one_mock_instance}
         subject = Node('booga', self.mock_node_commands)
         self.mock_node_commands.cat_logs.return_value.expect.side_effect = [1, 0]
         self.mock_node_commands.cat_logs.return_value.match.group.return_value.split.return_value = [' descriptor ']
@@ -60,6 +66,10 @@ class TestNode:
         subject = Node('booga', self.mock_node_commands)
         self.mock_node_commands.cat_logs.return_value.expect.side_effect = [1, 0]
         self.mock_node_commands.cat_logs.return_value.match.group.return_value.split.return_value = [' descriptor ']
+        one_mock_instance = mocker.Mock()
+        one_mock_instance.machine_name = mocker.Mock(return_value='booga')
+        one_mock_instance.index_name = mocker.Mock(return_value='node-0')
+        tnt_config.INSTANCES = {'booga': one_mock_instance}
 
         real_descriptor = subject.start('1.2.3.4', "")
 

@@ -14,17 +14,18 @@ import pexpect
 
 class Docker(InstanceApi):
 
+    _machine_name = None
     node = None
     dns = None
     traffic = None
 
-    def __init__(self, name, instance_index):
-        self.name = name
+    def __init__(self, machine_name, instance_index):
+        self._machine_name = machine_name
         self.instance_index = instance_index
         self.executor = Executor()
-        self.node = Node(name, NodeDockerCommands(name, self.get_external_ip))
-        self.dns = Dns(name, DnsDockerCommands(name))
-        self.traffic = TrafficHandler(name, TrafficDockerCommands(name))
+        self.node = Node(machine_name, NodeDockerCommands(machine_name, self.get_external_ip))
+        self.dns = Dns(machine_name, DnsDockerCommands(machine_name))
+        self.traffic = TrafficHandler(machine_name, TrafficDockerCommands(machine_name))
 
     def start_instance(self):
         if not self._network_exists():
@@ -60,9 +61,9 @@ class Docker(InstanceApi):
 
     def _docker_remove_container(self):
         command = [
-            "docker", "container", "rm", "--force", self.name
+            "docker", "container", "rm", "--force", self.machine_name()
         ]
-        print("\tRemoving docker container %s" % self.name)
+        print("\tRemoving docker container %s" % self.machine_name())
         (stdoutdata, stderrdata) = self.executor.execute_sync_with_output(command)
         print(stderrdata)
     

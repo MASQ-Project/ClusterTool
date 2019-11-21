@@ -14,20 +14,21 @@ from dns import Dns
 
 class EC2(InstanceApi):
 
+    _machine_name = None
     node = None
     dns = None
     traffic = None
 
-    def __init__(self, name):
+    def __init__(self, machine_name):
         self.client = boto3.client('ec2', EC2_CONFIG['region'])
         self.ip = ""
-        self.name = name
-        self.node = Node(name, NodeSshCommands(self.get_external_ip))
-        self.dns = Dns(name, DnsSshCommands(self.get_external_ip))
-        self.traffic = TrafficHandler(name, TrafficSshCommands(self.get_external_ip))
+        self._machine_name = machine_name
+        self.node = Node(machine_name, NodeSshCommands(self.get_external_ip))
+        self.dns = Dns(machine_name, DnsSshCommands(self.get_external_ip))
+        self.traffic = TrafficHandler(machine_name, TrafficSshCommands(self.get_external_ip))
 
     def start_instance(self):
-        print('\tStarting %s EC2 instance' % self.name)
+        print('\tStarting %s EC2 instance' % self.machine_name())
         self._wait_for_a_state(['running', 'stopped'])
         response = self.client.start_instances(
             InstanceIds=[
@@ -36,7 +37,7 @@ class EC2(InstanceApi):
         )
 
     def stop_instance(self):
-        print('\tStopping %s EC2 instance' % self.name)
+        print('\tStopping %s EC2 instance' % self.machine_name())
         self._wait_for_a_state(['running', 'stopped'])
         response = self.client.stop_instances(
             InstanceIds=[
@@ -45,7 +46,7 @@ class EC2(InstanceApi):
         )
 
     def restart_instance(self):
-        print('\tRestarting %s EC2 instance' % self.name)
+        print('\tRestarting %s EC2 instance' % self.machine_name())
         self._wait_for_a_state(['running', 'stopped'])
         response = self.client.reboot_instances(
             InstanceIds=[
@@ -74,7 +75,7 @@ class EC2(InstanceApi):
                 },
                 {
                     'Name': 'tag:Name',
-                    'Values': [self.name]
+                    'Values': [self.machine_name()]
                 }
             ]
         )
@@ -87,7 +88,7 @@ class EC2(InstanceApi):
         return instance_id
 
     def _wait_for_external_ip(self):
-        print("\t\tWaiting for external IP for %s EC2 instance..." % self.name)
+        print("\t\tWaiting for external IP for %s EC2 instance..." % self.machine_name())
         while True:
             reservation = self._get_instance()['Reservations'][0]
             instance = reservation['Instances'][0]
@@ -99,7 +100,7 @@ class EC2(InstanceApi):
             time.sleep(1)
 
     def _wait_for_a_state(self, state_names):
-        print("\t\tWaiting for %s EC2 instance to reach a state in %s..." % (self.name, state_names))
+        print("\t\tWaiting for %s EC2 instance to reach a state in %s..." % (self.machine_name(), state_names))
         while True:
             description = self._get_instance()
             reservation = description['Reservations'][0]

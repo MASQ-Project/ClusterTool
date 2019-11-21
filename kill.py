@@ -16,7 +16,7 @@ def command():
 
 
 def _kill(instance):
-    instance_name = instance.name
+    instance_name = instance.index_name()
     api = instance.instance_api
     instance.kill()
 

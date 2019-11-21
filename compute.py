@@ -14,6 +14,7 @@ from dns import Dns
 
 class Compute(InstanceApi):
 
+    _machine_name = None
     node = None
     dns = None
     traffic = None
@@ -39,9 +40,6 @@ class Compute(InstanceApi):
     def restart_instance(self):
         print('\tRestarting %s Compute instance' % self.machine_name())
         return self.compute.instances().reset(project=self.project, zone=self.zone, instance=self.machine_name()).execute()
-
-    def machine_name(self):
-        return self._machine_name
 
     def get_external_ip(self):
         if self.ip == "":

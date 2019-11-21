@@ -12,8 +12,10 @@ class TestInit:
     def available_instances(self, mocker):
         self.mock_first_compute_instance = mocker.Mock()
         self.mock_second_compute_instance = mocker.Mock()
-        self.mock_first_compute_instance.name = 'Google1'
-        self.mock_second_compute_instance.name = 'Google2'
+        self.mock_first_compute_instance.index_name = mocker.Mock(return_value='g-node-1')
+        self.mock_first_compute_instance.machine_name = mocker.Mock(return_value='Google-machine1')
+        self.mock_second_compute_instance.index_name = mocker.Mock(return_value='g-node-2')
+        self.mock_second_compute_instance.machine_name = mocker.Mock(return_value='Google-machine2')
         self.mock_first_compute_instance.__class__ = 'Compute'
         self.mock_second_compute_instance.__class__ = 'Compute'
         mocker.patch.object(subject, 'COMPUTE_INSTANCES', [
@@ -23,8 +25,10 @@ class TestInit:
 
         self.mock_first_ec2_instance = mocker.Mock()
         self.mock_second_ec2_instance = mocker.Mock()
-        self.mock_first_ec2_instance.name = 'Amazon1'
-        self.mock_second_ec2_instance.name = 'Amazon2'
+        self.mock_first_ec2_instance.index_name = mocker.Mock(return_value='a-node-1')
+        self.mock_first_ec2_instance.machine_name = mocker.Mock(return_value='Amazon-machine1')
+        self.mock_second_ec2_instance.index_name = mocker.Mock(return_value='a-node-2')
+        self.mock_second_ec2_instance.machine_name = mocker.Mock(return_value='Amazon-machine2')
         self.mock_first_ec2_instance.__class__ = 'EC2'
         self.mock_second_ec2_instance.__class__ = 'EC2'
         mocker.patch.object(subject, 'EC2_INSTANCES', [
@@ -34,8 +38,10 @@ class TestInit:
 
         self.mock_first_vbox_instance = mocker.Mock()
         self.mock_second_vbox_instance = mocker.Mock()
-        self.mock_first_vbox_instance.name = 'VBox1'
-        self.mock_second_vbox_instance.name = 'VBox2'
+        self.mock_first_vbox_instance.index_name = mocker.Mock(return_value='v-node-1')
+        self.mock_first_vbox_instance.machine_name = mocker.Mock(return_value='VBox-machine1')
+        self.mock_second_vbox_instance.index_name = mocker.Mock(return_value='v-node-2')
+        self.mock_second_vbox_instance.machine_name = mocker.Mock(return_value='VBox-machine2')
         self.mock_first_vbox_instance.__class__ = 'VirtualBox'
         self.mock_second_vbox_instance.__class__ = 'VirtualBox'
         mocker.patch.object(subject, 'VIRTUALBOX_INSTANCES', [
@@ -45,8 +51,10 @@ class TestInit:
 
         self.mock_first_docker_instance = mocker.Mock()
         self.mock_second_docker_instance = mocker.Mock()
-        self.mock_first_docker_instance.name = 'Docker1'
-        self.mock_second_docker_instance.name = 'Docker2'
+        self.mock_first_docker_instance.index_name = mocker.Mock(return_value='d-node-1')
+        self.mock_first_docker_instance.machine_name = mocker.Mock(return_value='Docker-machine1')
+        self.mock_second_docker_instance.index_name = mocker.Mock(return_value='d-node-2')
+        self.mock_second_docker_instance.machine_name = mocker.Mock(return_value='Docker-machine2')
         self.mock_first_docker_instance.__class__ = 'Docker'
         self.mock_second_docker_instance.__class__ = 'Docker'
         mocker.patch.object(subject, 'DOCKER_INSTANCES', [
@@ -62,8 +70,8 @@ class TestInit:
     def instances(self, mocker, available_instances):
         self.mock_first_instance = mocker.Mock()
         self.mock_second_instance = mocker.Mock()
-        self.mock_first_instance.name = 'node-0'
-        self.mock_second_instance.name = 'node-1'
+        self.mock_first_instance.index_name = mocker.Mock(return_value='node-0')
+        self.mock_second_instance.index_name = mocker.Mock(return_value='node-1')
         self.mock_first_instance.__class__ = 'ExistingClass'
         self.mock_second_instance.__class__ = 'ExistingClass'
         mocker.patch.object(subject, 'INSTANCES', {
@@ -91,15 +99,15 @@ class TestInit:
 
         assert self.mock_print.mock_calls == [
             mocker.call('\nAvailable configured cloud instances:'),
-            mocker.call("\tGoogle: ['Google1', 'Google2']"),
-            mocker.call("\tAmazon: ['Amazon1', 'Amazon2']"),
+            mocker.call("\tGoogle: ['Google-machine1', 'Google-machine2']"),
+            mocker.call("\tAmazon: ['Amazon-machine1', 'Amazon-machine2']"),
             mocker.call('\nAvailable configured local instances (probably cannot be used alongside above):'),
-            mocker.call("\tVirtualBox: ['VBox1', 'VBox2']\n"),
-            mocker.call("\tDocker: ['Docker1', 'Docker2']\n"),
-            mocker.call("Configured node-2 on Google1 (Compute)"),
-            mocker.call("Configured node-3 on Google2 (Compute)"),
-            mocker.call("Configured node-4 on Amazon1 (EC2)"),
-            mocker.call("Configured node-5 on Amazon2 (EC2)")
+            mocker.call("\tVirtualBox: ['VBox-machine1', 'VBox-machine2']\n"),
+            mocker.call("\tDocker: ['Docker-machine1', 'Docker-machine2']\n"),
+            mocker.call("Configured node-2 on Google-machine1 (Compute)"),
+            mocker.call("Configured node-3 on Google-machine2 (Compute)"),
+            mocker.call("Configured node-4 on Amazon-machine1 (EC2)"),
+            mocker.call("Configured node-5 on Amazon-machine2 (EC2)")
         ]
 
         assert mock_input.mock_calls == [
@@ -109,12 +117,12 @@ class TestInit:
             mocker.call().strip()
         ]
 
-        assert subject.INSTANCES['node-0'].name == 'node-0'
-        assert subject.INSTANCES['node-1'].name == 'node-1'
-        assert subject.INSTANCES['node-2'].instance_api.name == 'Google1'
-        assert subject.INSTANCES['node-3'].instance_api.name == 'Google2'
-        assert subject.INSTANCES['node-4'].instance_api.name == 'Amazon1'
-        assert subject.INSTANCES['node-5'].instance_api.name == 'Amazon2'
+        assert subject.INSTANCES['node-0'].index_name() == 'node-0'
+        assert subject.INSTANCES['node-1'].index_name() == 'node-1'
+        assert subject.INSTANCES['node-2'].instance_api.machine_name() == 'Google-machine1'
+        assert subject.INSTANCES['node-3'].instance_api.machine_name() == 'Google-machine2'
+        assert subject.INSTANCES['node-4'].instance_api.machine_name() == 'Amazon-machine1'
+        assert subject.INSTANCES['node-5'].instance_api.machine_name() == 'Amazon-machine2'
         assert not subject.COMPUTE_INSTANCES
         assert not subject.EC2_INSTANCES
 
@@ -138,12 +146,12 @@ class TestInit:
 
         assert self.mock_print.mock_calls == [
             mocker.call('\nAvailable configured cloud instances:'),
-            mocker.call("\tGoogle: ['Google1', 'Google2']"),
-            mocker.call("\tAmazon: ['Amazon1', 'Amazon2']"),
+            mocker.call("\tGoogle: ['Google-machine1', 'Google-machine2']"),
+            mocker.call("\tAmazon: ['Amazon-machine1', 'Amazon-machine2']"),
             mocker.call('\nAvailable configured local instances (probably cannot be used alongside above):'),
-            mocker.call("\tVirtualBox: ['VBox1', 'VBox2']\n"),
-            mocker.call("\tDocker: ['Docker1', 'Docker2']\n"),
-            mocker.call("Configured node-2 on Google1 (Compute)")
+            mocker.call("\tVirtualBox: ['VBox-machine1', 'VBox-machine2']\n"),
+            mocker.call("\tDocker: ['Docker-machine1', 'Docker-machine2']\n"),
+            mocker.call("Configured node-2 on Google-machine1 (Compute)")
         ]
 
         assert mock_input.mock_calls == [
@@ -153,9 +161,9 @@ class TestInit:
             mocker.call().strip()
         ]
 
-        assert subject.INSTANCES['node-0'].name == 'node-0'
-        assert subject.INSTANCES['node-1'].name == 'node-1'
-        assert subject.INSTANCES['node-2'].instance_api.name == 'Google1'
+        assert subject.INSTANCES['node-0'].index_name() == 'node-0'
+        assert subject.INSTANCES['node-1'].index_name() == 'node-1'
+        assert subject.INSTANCES['node-2'].instance_api.index_name() == 'g-node-1'
         assert len(subject.COMPUTE_INSTANCES) == 1
         assert len(subject.EC2_INSTANCES) == 2
 
@@ -176,12 +184,12 @@ class TestInit:
 
         assert self.mock_print.mock_calls == [
             mocker.call('\nAvailable configured cloud instances:'),
-            mocker.call("\tGoogle: ['Google1', 'Google2']"),
-            mocker.call("\tAmazon: ['Amazon1', 'Amazon2']"),
+            mocker.call("\tGoogle: ['Google-machine1', 'Google-machine2']"),
+            mocker.call("\tAmazon: ['Amazon-machine1', 'Amazon-machine2']"),
             mocker.call('\nAvailable configured local instances (probably cannot be used alongside above):'),
-            mocker.call("\tVirtualBox: ['VBox1', 'VBox2']\n"),
-            mocker.call("\tDocker: ['Docker1', 'Docker2']\n"),
-            mocker.call("Configured node-2 on VBox1 (VirtualBox)")
+            mocker.call("\tVirtualBox: ['VBox-machine1', 'VBox-machine2']\n"),
+            mocker.call("\tDocker: ['Docker-machine1', 'Docker-machine2']\n"),
+            mocker.call("Configured node-2 on VBox-machine1 (VirtualBox)")
         ]
 
         assert mock_input.mock_calls == [
@@ -191,9 +199,10 @@ class TestInit:
             mocker.call().strip()
         ]
 
-        assert subject.INSTANCES['node-0'].name == 'node-0'
-        assert subject.INSTANCES['node-1'].name == 'node-1'
-        assert subject.INSTANCES['node-2'].instance_api.name == 'VBox1'
+        assert subject.INSTANCES['node-0'].index_name() == 'node-0'
+        assert subject.INSTANCES['node-1'].index_name() == 'node-1'
+        assert subject.INSTANCES['node-2'].instance_api.index_name() == 'v-node-1'
+        assert subject.INSTANCES['node-2'].instance_api.machine_name() == 'VBox-machine1'
         assert len(subject.VIRTUALBOX_INSTANCES) == 1
 
         self.mock_first_instance.start.assert_called_with()
@@ -213,12 +222,12 @@ class TestInit:
 
         assert self.mock_print.mock_calls == [
             mocker.call('\nAvailable configured cloud instances:'),
-            mocker.call("\tGoogle: ['Google1', 'Google2']"),
-            mocker.call("\tAmazon: ['Amazon1', 'Amazon2']"),
+            mocker.call("\tGoogle: ['Google-machine1', 'Google-machine2']"),
+            mocker.call("\tAmazon: ['Amazon-machine1', 'Amazon-machine2']"),
             mocker.call('\nAvailable configured local instances (probably cannot be used alongside above):'),
-            mocker.call("\tVirtualBox: ['VBox1', 'VBox2']\n"),
-            mocker.call("\tDocker: ['Docker1', 'Docker2']\n"),
-            mocker.call("Configured node-2 on Docker1 (Docker)")
+            mocker.call("\tVirtualBox: ['VBox-machine1', 'VBox-machine2']\n"),
+            mocker.call("\tDocker: ['Docker-machine1', 'Docker-machine2']\n"),
+            mocker.call("Configured node-2 on Docker-machine1 (Docker)")
         ]
 
         assert mock_input.mock_calls == [
@@ -228,9 +237,10 @@ class TestInit:
             mocker.call().strip()
         ]
 
-        assert subject.INSTANCES['node-0'].name == 'node-0'
-        assert subject.INSTANCES['node-1'].name == 'node-1'
-        assert subject.INSTANCES['node-2'].instance_api.name == 'Docker1'
+        assert subject.INSTANCES['node-0'].index_name() == 'node-0'
+        assert subject.INSTANCES['node-1'].index_name() == 'node-1'
+        assert subject.INSTANCES['node-2'].instance_api.index_name() == 'd-node-1'
+        assert subject.INSTANCES['node-2'].instance_api.machine_name() == 'Docker-machine1'
         assert len(subject.DOCKER_INSTANCES) == 1
 
         self.mock_first_instance.start.assert_called_with()
@@ -250,12 +260,12 @@ class TestInit:
 
         assert self.mock_print.mock_calls == [
             mocker.call('\nAvailable configured cloud instances:'),
-            mocker.call("\tGoogle: ['Google1', 'Google2']"),
-            mocker.call("\tAmazon: ['Amazon1', 'Amazon2']"),
+            mocker.call("\tGoogle: ['Google-machine1', 'Google-machine2']"),
+            mocker.call("\tAmazon: ['Amazon-machine1', 'Amazon-machine2']"),
             mocker.call('\nAvailable configured local instances (probably cannot be used alongside above):'),
-            mocker.call("\tVirtualBox: ['VBox1', 'VBox2']\n"),
-            mocker.call("\tDocker: ['Docker1', 'Docker2']\n"),
-            mocker.call("Configured node-0 on Google1 (Compute)")
+            mocker.call("\tVirtualBox: ['VBox-machine1', 'VBox-machine2']\n"),
+            mocker.call("\tDocker: ['Docker-machine1', 'Docker-machine2']\n"),
+            mocker.call("Configured node-0 on Google-machine1 (Compute)")
         ]
 
         assert mock_input.mock_calls == [
@@ -281,12 +291,12 @@ class TestInit:
 
         assert self.mock_print.mock_calls == [
             mocker.call('\nAvailable configured cloud instances:'),
-            mocker.call("\tGoogle: ['Google1', 'Google2']"),
-            mocker.call("\tAmazon: ['Amazon1', 'Amazon2']"),
+            mocker.call("\tGoogle: ['Google-machine1', 'Google-machine2']"),
+            mocker.call("\tAmazon: ['Amazon-machine1', 'Amazon-machine2']"),
             mocker.call(
                 '\nAvailable configured local instances (probably cannot be used alongside above):'),
-            mocker.call("\tVirtualBox: ['VBox1', 'VBox2']\n"),
-            mocker.call("\tDocker: ['Docker1', 'Docker2']\n"),
+            mocker.call("\tVirtualBox: ['VBox-machine1', 'VBox-machine2']\n"),
+            mocker.call("\tDocker: ['Docker-machine1', 'Docker-machine2']\n"),
             mocker.call('invalidgroup is not a valid platform group. Try again')
         ]
 
@@ -309,12 +319,12 @@ class TestInit:
 
         assert self.mock_print.mock_calls == [
             mocker.call('\nAvailable configured cloud instances:'),
-            mocker.call("\tGoogle: ['Google1', 'Google2']"),
-            mocker.call("\tAmazon: ['Amazon1', 'Amazon2']"),
+            mocker.call("\tGoogle: ['Google-machine1', 'Google-machine2']"),
+            mocker.call("\tAmazon: ['Amazon-machine1', 'Amazon-machine2']"),
             mocker.call(
                 '\nAvailable configured local instances (probably cannot be used alongside above):'),
-            mocker.call("\tVirtualBox: ['VBox1', 'VBox2']\n"),
-            mocker.call("\tDocker: ['Docker1', 'Docker2']\n")
+            mocker.call("\tVirtualBox: ['VBox-machine1', 'VBox-machine2']\n"),
+            mocker.call("\tDocker: ['Docker-machine1', 'Docker-machine2']\n"),
         ]
 
         assert mock_input.mock_calls == [
@@ -336,12 +346,12 @@ class TestInit:
 
         assert self.mock_print.mock_calls == [
             mocker.call('\nAvailable configured cloud instances:'),
-            mocker.call("\tGoogle: ['Google1', 'Google2']"),
-            mocker.call("\tAmazon: ['Amazon1', 'Amazon2']"),
+            mocker.call("\tGoogle: ['Google-machine1', 'Google-machine2']"),
+            mocker.call("\tAmazon: ['Amazon-machine1', 'Amazon-machine2']"),
             mocker.call(
                 '\nAvailable configured local instances (probably cannot be used alongside above):'),
-            mocker.call("\tVirtualBox: ['VBox1', 'VBox2']\n"),
-            mocker.call("\tDocker: ['Docker1', 'Docker2']\n")
+            mocker.call("\tVirtualBox: ['VBox-machine1', 'VBox-machine2']\n"),
+            mocker.call("\tDocker: ['Docker-machine1', 'Docker-machine2']\n"),
         ]
 
         assert mock_input.mock_calls == [
@@ -363,12 +373,12 @@ class TestInit:
 
         assert self.mock_print.mock_calls == [
             mocker.call('\nAvailable configured cloud instances:'),
-            mocker.call("\tGoogle: ['Google1', 'Google2']"),
-            mocker.call("\tAmazon: ['Amazon1', 'Amazon2']"),
+            mocker.call("\tGoogle: ['Google-machine1', 'Google-machine2']"),
+            mocker.call("\tAmazon: ['Amazon-machine1', 'Amazon-machine2']"),
             mocker.call(
                 '\nAvailable configured local instances (probably cannot be used alongside above):'),
-            mocker.call("\tVirtualBox: ['VBox1', 'VBox2']\n"),
-            mocker.call("\tDocker: ['Docker1', 'Docker2']\n"),
+            mocker.call("\tVirtualBox: ['VBox-machine1', 'VBox-machine2']\n"),
+            mocker.call("\tDocker: ['Docker-machine1', 'Docker-machine2']\n"),
             mocker.call('5 is not in range 1-4. Try again')
         ]
 
@@ -393,12 +403,12 @@ class TestInit:
 
         assert self.mock_print.mock_calls == [
             mocker.call('\nAvailable configured cloud instances:'),
-            mocker.call("\tGoogle: ['Google1', 'Google2']"),
-            mocker.call("\tAmazon: ['Amazon1', 'Amazon2']"),
+            mocker.call("\tGoogle: ['Google-machine1', 'Google-machine2']"),
+            mocker.call("\tAmazon: ['Amazon-machine1', 'Amazon-machine2']"),
             mocker.call(
                 '\nAvailable configured local instances (probably cannot be used alongside above):'),
-            mocker.call("\tVirtualBox: ['VBox1', 'VBox2']\n"),
-            mocker.call("\tDocker: ['Docker1', 'Docker2']\n"),
+            mocker.call("\tVirtualBox: ['VBox-machine1', 'VBox-machine2']\n"),
+            mocker.call("\tDocker: ['Docker-machine1', 'Docker-machine2']\n"),
             mocker.call("shouldbenumber isn't a number. Try again")
         ]
 
