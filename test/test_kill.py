@@ -4,7 +4,7 @@ from ec2 import EC2
 from compute import Compute
 from virtualbox import VirtualBoxManage
 from docker import Docker
-import command
+import tnt_config
 import kill as subject
 
 
@@ -15,8 +15,7 @@ class TestKill:
         self.mock_instance = mocker.Mock()
         self.mock_instance.index_name = mocker.Mock(return_value='node-0')
         instance_dict = {'node-0': self.mock_instance}
-        mocker.patch.object(subject, 'INSTANCES', instance_dict)
-        mocker.patch.object(command, 'INSTANCES', instance_dict)
+        mocker.patch.object(tnt_config, 'INSTANCES', instance_dict)
 
     @pytest.fixture
     def ec2_instance(self, mocker, neighbor):
@@ -53,7 +52,7 @@ class TestKill:
         real_select_command.run_for('node-0')
 
         self.mock_instance.kill.assert_called_with()
-        assert self.mock_ec2_instance in subject.EC2_INSTANCES
+        assert self.mock_ec2_instance in tnt_config.EC2_INSTANCES
 
     def test_command_for_compute(self, compute_instance):
         real_select_command = subject.command()
@@ -61,7 +60,7 @@ class TestKill:
         real_select_command.run_for('node-0')
 
         self.mock_instance.kill.assert_called_with()
-        assert self.mock_compute_instance in subject.COMPUTE_INSTANCES
+        assert self.mock_compute_instance in tnt_config.COMPUTE_INSTANCES
 
     def test_command_for_virtualbox(self, vbox_instance):
         real_select_command = subject.command()
@@ -69,7 +68,7 @@ class TestKill:
         real_select_command.run_for('node-0')
 
         self.mock_instance.kill.assert_called_with()
-        assert self.mock_vbox_instance in subject.VIRTUALBOX_INSTANCES
+        assert self.mock_vbox_instance in tnt_config.VIRTUALBOX_INSTANCES
 
     def test_command_for_docker(self, docker_instance):
         real_select_command = subject.command()
@@ -77,4 +76,4 @@ class TestKill:
         real_select_command.run_for('node-0')
 
         self.mock_instance.kill.assert_called_with()
-        assert self.mock_docker_instance in subject.DOCKER_INSTANCES
+        assert self.mock_docker_instance in tnt_config.DOCKER_INSTANCES

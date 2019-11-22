@@ -10,7 +10,7 @@ class TestInfo:
         self.mock_first_instance = mocker.MagicMock()
         self.mock_second_instance = mocker.MagicMock()
         mocker.patch.dict(
-            'command.INSTANCES',
+            'tnt_config.INSTANCES',
             first=self.mock_first_instance,
             second=self.mock_second_instance
         )

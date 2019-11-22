@@ -1,6 +1,7 @@
 # Copyright (c) 2019, Substratum LLC (https://substratum.net) and/or its affiliates. All rights reserved.
 from __future__ import print_function
-from tnt_config import INSTANCES
+
+import tnt_config
 
 
 class Command:
@@ -52,12 +53,12 @@ class SelectCommand:
             self.run()
 
         if 'all' in index_names:
-            index_names = INSTANCES.keys()
+            index_names = tnt_config.INSTANCES.keys()
 
         self._run_for_all(self.sub_fn, index_names)
 
     def _choose_instances(self):
-        the_input = raw_input("\t%s: choose from %s (space-delimited) or 'all' (blank line to cancel): " % (self.name, sorted(INSTANCES.keys()))).strip()
+        the_input = raw_input("\t%s: choose from %s (space-delimited) or 'all' (blank line to cancel): " % (self.name, sorted(tnt_config.INSTANCES.keys()))).strip()
         # enable exit on blank line
         if the_input == '':
             return ['']
@@ -78,7 +79,7 @@ class SelectCommand:
         index_names = set(index_names)
         # check for unknown instances
         for index_name in index_names:
-            if index_name not in INSTANCES.keys() and index_name != 'all':
+            if index_name not in tnt_config.INSTANCES.keys() and index_name != 'all':
                 print("\tno known instance called %s" % index_name)
                 return []
         return index_names
@@ -91,7 +92,7 @@ class SelectCommand:
 
             to_return = False
             if 'all' in index_names:
-                index_names = INSTANCES.keys()
+                index_names = tnt_config.INSTANCES.keys()
                 to_return = True
 
             self._run_for_all(fn, index_names)
@@ -100,7 +101,7 @@ class SelectCommand:
 
     def _run_for_all(self, fn, index_names):
         for index_name in sorted(index_names):
-            fn(INSTANCES[index_name])
+            fn(tnt_config.INSTANCES[index_name])
 
 
 class SetCommand(SelectCommand):
@@ -129,7 +130,7 @@ class SetCommand(SelectCommand):
             self._choose_and_run(fn)
 
         if 'all' in names:
-            names = INSTANCES.keys()
+            names = tnt_config.INSTANCES.keys()
 
         self._run_for_all(fn, names)
 

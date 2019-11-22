@@ -1,6 +1,6 @@
 # Copyright (c) 2019, Substratum LLC (https://substratum.net) and/or its affiliates. All rights reserved.
 import pytest
-import command
+import tnt_config
 import nfo as subject
 
 
@@ -11,7 +11,7 @@ class TestNfo:
         self.mock_instance = mocker.Mock(autospec=True)
         self.mock_instance._index_name = 'node-0'
         instance_dict = {'node-0': self.mock_instance}
-        mocker.patch.object(command, 'INSTANCES', instance_dict)
+        mocker.patch.object(tnt_config, 'INSTANCES', instance_dict)
 
     def test_name(self):
         assert subject.name() == 'nfo'
