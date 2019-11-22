@@ -52,13 +52,13 @@ class TestNode:
         self.mock_node_commands.cat_logs.return_value.match.group.assert_called_with(1)
         self.mock_node_commands.cat_logs.return_value.match.group.return_value.split.assert_called_with('\r')
         self.mock_node_commands.start.assert_called_with({
-            'dns-servers': "--dns-servers 1.1.1.1",
-            'log-level': "--log-level trace",
-            'data-directory': "--data-directory /tmp",
-            'ip': "--ip 1.2.3.4",
-            'earning-wallet': "--earning-wallet 0x01020304010203040102030401020304EEEEEEEE",
-            'consuming-private-key': '--consuming-private-key 89d59b93ef6a94c977e1812b727d5f123f7d825ab636e83aad3e2845a68eaedb',
-            'additional-args': "--neighbors neighbor_descriptor",
+            'dns-servers': '1.1.1.1',
+            'log-level': 'trace',
+            'data-directory': '/tmp',
+            'ip': '1.2.3.4',
+            'earning-wallet': '0x01020304010203040102030401020304EEEEEEEE',
+            'consuming-private-key': '89d59b93ef6a94c977e1812b727d5f123f7d825ab636e83aad3e2845a68eaedb',
+            'neighbors': 'neighbor_descriptor',
         })
         assert real_descriptor == 'descriptor'
 
@@ -87,12 +87,12 @@ class TestNode:
         self.mock_node_commands.cat_logs.return_value.match.group.assert_called_with(1)
         self.mock_node_commands.cat_logs.return_value.match.group.return_value.split.assert_called_with('\r')
         self.mock_node_commands.start.assert_called_with({
-            'dns-servers': "--dns-servers 1.1.1.1",
-            'log-level': "--log-level trace",
-            'data-directory': "--data-directory /tmp",
-            'ip': "--ip 1.2.3.4",
-            'earning-wallet': "--earning-wallet 0x01020304010203040102030401020304EEEEEEEE",
-            'consuming-private-key': '--consuming-private-key 89d59b93ef6a94c977e1812b727d5f123f7d825ab636e83aad3e2845a68eaedb',
+            'dns-servers': '1.1.1.1',
+            'log-level': 'trace',
+            'data-directory': '/tmp',
+            'ip': '1.2.3.4',
+            'earning-wallet': '0x01020304010203040102030401020304EEEEEEEE',
+            'consuming-private-key': '89d59b93ef6a94c977e1812b727d5f123f7d825ab636e83aad3e2845a68eaedb',
         })
         assert real_descriptor == 'descriptor'
         assert subject.instance.index_name() == 'node-0'

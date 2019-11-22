@@ -16,7 +16,7 @@ class NodeCommands:
         self.ip = ip
 
     @abstractmethod
-    def start(self, node_args): raise NotImplementedError
+    def start(self, args_map): raise NotImplementedError
 
     @abstractmethod
     def stop(self): raise NotImplementedError

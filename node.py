@@ -20,18 +20,18 @@ class Node:
     def machine_name(self):
         return self._machine_name
 
-    def start(self, ip, neighbor_info):
+    def start(self, ip, neighbor_descriptors):
         if self.descriptor != "":
             print("it looks like node is already running on %s" % self.machine_name())
             return self.descriptor
         self.instance = self._find_matching_instance()
-        if neighbor_info == "":
+        if neighbor_descriptors == "":
             print("\tstarting initial node %s..." % self.machine_name())
             self._start_node_with(ip)
             print("\tnode running: %s" % self.descriptor)
         else:
             print("\tstarting debut node %s..." % self.machine_name())
-            self._start_node_with(ip, "--neighbors %s" % neighbor_info)
+            self._start_node_with(ip, neighbor_descriptors)
             print("\tnode running: %s" % self.descriptor)
         return self.descriptor
 
@@ -56,20 +56,20 @@ class Node:
             sys.exit("There should have been exactly one instance named %s, not %s" % (self.machine_name(), len(matching_instances)))
         return matching_instances[0]
 
-    def _start_node_with(self, ip, arg_str=None):
+    def _start_node_with(self, ip, neighbor_descriptors=None):
         # ensure the first descriptor match will be the current running node
         self._delete_existing_log()
-        node_args = {
-            'dns-servers': "--dns-servers 1.1.1.1",
-            'log-level': "--log-level trace",
-            'data-directory': "--data-directory /tmp",
-            'ip': "--ip %s" % ip,
-            'earning-wallet': "--earning-wallet %s" % self.earning_wallet(ip),
-            'consuming-private-key': "--consuming-private-key %s" % self.consuming_private_key(ip),
+        args_map = {
+            'dns-servers': '1.1.1.1',
+            'log-level': 'trace',
+            'data-directory': '/tmp',
+            'ip': ip,
+            'earning-wallet': self.earning_wallet(ip),
+            'consuming-private-key': self.consuming_private_key(ip),
         }
-        if arg_str:
-            node_args['additional-args'] = arg_str
-        self.node_commands.start(node_args)
+        if neighbor_descriptors:
+            args_map['neighbors'] = neighbor_descriptors
+        self.node_commands.start(args_map)
         self.descriptor = self._wait_for_descriptor()
 
     def retrieve_logs(self, to_dir):
