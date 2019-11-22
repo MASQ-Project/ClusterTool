@@ -69,6 +69,7 @@ class Node:
         }
         if neighbor_descriptors:
             args_map['neighbors'] = neighbor_descriptors
+        args_map.update(self.instance.attributes)
         self.node_commands.start(args_map)
         self.descriptor = self._wait_for_descriptor()
 
