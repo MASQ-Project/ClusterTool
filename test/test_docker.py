@@ -33,7 +33,7 @@ class TestDocker:
     def test_construction_properties(self):
         subject = Docker('mario', 27)
 
-        assert subject.name == 'mario'
+        assert subject.machine_name() == 'mario'
         assert subject.instance_index == 27
 
     def test_construction_executor(self, executor):
@@ -49,18 +49,18 @@ class TestDocker:
 
         subject.node.shell()
 
-        self.mock_node_docker_commands.assert_called_with(subject.name, subject.get_external_ip)
+        self.mock_node_docker_commands.assert_called_with(subject.machine_name(), subject.get_external_ip)
         self.mock_node_docker_commands.return_value.shell.assert_called_with()
 
     def test_dns_property(self, dns_docker_commands):
         subject = Docker('mario', 27)
 
-        self.mock_dns_docker_commands.assert_called_with(subject.name)
+        self.mock_dns_docker_commands.assert_called_with(subject.machine_name())
 
     def test_traffic_property(self, traffic_docker_commands):
         subject = Docker('mario', 27)
 
-        self.mock_traffic_docker_commands.assert_called_with(subject.name)
+        self.mock_traffic_docker_commands.assert_called_with(subject.machine_name())
 
     def test_start_instance_when_network_does_not_exist(self, mocker, executor, printing):
         self.mock_executor.return_value.execute_async.return_value.expect.return_value = 1  # didn't find test_net

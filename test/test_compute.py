@@ -70,10 +70,10 @@ class TestCompute:
         assert subject.project == 'project'
         assert subject.zone == 'usa'
         assert subject.ip == ''
-        assert subject.name == 'Google'
-        assert subject.node.name == 'Google'
-        assert subject.dns.name == 'Google'
-        assert subject.traffic.name == 'Google'
+        assert subject.machine_name() == 'Google'
+        assert subject.node.machine_name() == 'Google'
+        assert subject.dns.machine_name() == 'Google'
+        assert subject.traffic.machine_name() == 'Google'
 
     def test_node_property(self, compute, node_ssh_commands):
         subject = Compute('Google', 'project', 'usa')

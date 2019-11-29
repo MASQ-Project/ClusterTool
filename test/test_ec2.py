@@ -80,7 +80,7 @@ class TestEC2:
         subject = EC2('Thor')
 
         self.mock_boto3.client.assert_called_with('ec2', EC2_CONFIG['region'])
-        assert subject.name == 'Thor'
+        assert subject.machine_name() == 'Thor'
         assert subject.ip == ''
 
     def test_node_property(self, boto3, node_ssh_commands):

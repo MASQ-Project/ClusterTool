@@ -1,6 +1,7 @@
 # Copyright (c) 2019, Substratum LLC (https://substratum.net) and/or its affiliates. All rights reserved.
 import pytest
 from info import *
+import tnt_config
 
 
 class TestInfo:
@@ -17,7 +18,7 @@ class TestInfo:
         self.mock_second_instance = mocker.MagicMock()
         self.mock_second_instance.get_ip.return_value = '2.3.4.5'
         self.mock_second_instance.instance_api.__class__ = 'SecondClass'
-        mocker.patch.dict('command.INSTANCES', first=self.mock_first_instance, second=self.mock_second_instance)
+        tnt_config.INSTANCES = {'first': self.mock_first_instance, 'second': self.mock_second_instance}
 
     def test_name(self):
         assert name() == 'info'

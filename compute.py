@@ -14,31 +14,32 @@ from dns import Dns
 
 class Compute(InstanceApi):
 
+    _machine_name = None
     node = None
     dns = None
     traffic = None
 
-    def __init__(self, name, project=COMPUTE_CONFIG['project'], zone=COMPUTE_CONFIG['zone']):
+    def __init__(self, machine_name, project=COMPUTE_CONFIG['project'], zone=COMPUTE_CONFIG['zone']):
         self.compute = googleapiclient.discovery.build('compute', 'v1')
         self.project = project
         self.zone = zone
         self.ip = ""
-        self.name = name
-        self.node = Node(name, NodeSshCommands(self.get_external_ip))
-        self.dns = Dns(name, DnsSshCommands(self.get_external_ip))
-        self.traffic = TrafficHandler(name, TrafficSshCommands(self.get_external_ip))
+        self._machine_name = machine_name
+        self.node = Node(machine_name, NodeSshCommands(self.get_external_ip))
+        self.dns = Dns(machine_name, DnsSshCommands(self.get_external_ip))
+        self.traffic = TrafficHandler(machine_name, TrafficSshCommands(self.get_external_ip))
 
     def start_instance(self):
-        print('\tStarting %s Compute instance' % self.name)
-        return self.compute.instances().start(project=self.project, zone=self.zone, instance=self.name).execute()
+        print('\tStarting %s Compute instance' % self.machine_name())
+        return self.compute.instances().start(project=self.project, zone=self.zone, instance=self.machine_name()).execute()
 
     def stop_instance(self):
-        print('\tStopping %s Compute instance' % self.name)
-        return self.compute.instances().stop(project=self.project, zone=self.zone, instance=self.name).execute()
+        print('\tStopping %s Compute instance' % self.machine_name())
+        return self.compute.instances().stop(project=self.project, zone=self.zone, instance=self.machine_name()).execute()
 
     def restart_instance(self):
-        print('\tRestarting %s Compute instance' % self.name)
-        return self.compute.instances().reset(project=self.project, zone=self.zone, instance=self.name).execute()
+        print('\tRestarting %s Compute instance' % self.machine_name())
+        return self.compute.instances().reset(project=self.project, zone=self.zone, instance=self.machine_name()).execute()
 
     def get_external_ip(self):
         if self.ip == "":
@@ -55,11 +56,11 @@ class Compute(InstanceApi):
 
     def _get_instance(self):
         for instance in self._list_instances()['items']:
-            if instance['name'] == self.name:
+            if instance['name'] == self.machine_name():
                 return instance
 
     def _wait_for_external_ip(self):
-        print("\t\tWaiting for external IP for %s Compute instance..." % self.name)
+        print("\t\tWaiting for external IP for %s Compute instance..." % self.machine_name())
         while True:
             instance = self._get_instance()
             interfaces = instance['networkInterfaces']

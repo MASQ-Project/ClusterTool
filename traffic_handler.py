@@ -17,10 +17,13 @@ CURL_SITE = "https://www.piday.org/million/"
 
 
 class TrafficHandler():
-    def __init__(self, name, traffic_commands):
-        self.name = name
+    def __init__(self, machine_name, traffic_commands):
+        self._machine_name = machine_name
         self.traffic_commands = traffic_commands
         self.traffic_handles = []
+
+    def machine_name(self):
+        return self._machine_name
 
     def curl(self, curl_what=CURL_SITE):
         # TODO prompt for the url, default if none given
@@ -29,7 +32,7 @@ class TrafficHandler():
         while curl_count < 0:
             user_count = raw_input(
                 "How many curls for %s? (blank line to cancel) " %
-                self.name
+                self.machine_name()
             ).strip()
             if user_count == "":
                 return
@@ -41,7 +44,7 @@ class TrafficHandler():
             if curl_count < 0:
                 print("%i is not a valid number" % curl_count)
 
-        print("\tstarting curl on %s..." % self.name)
+        print("\tstarting curl on %s..." % self.machine_name())
         for idx in range(curl_count):
             print("%s sending curl %s #%i" % (time.ctime(), curl_what, idx))
             self.traffic_handles.append(
@@ -51,7 +54,7 @@ class TrafficHandler():
         print("\tdone.")
 
     def wget(self):
-        print("\tstarting traffic on %s..." % self.name)
+        print("\tstarting traffic on %s..." % self.machine_name())
         for site in WGET_SITES:
             print("%s sending wget %s" % (time.ctime(), site))
             self.traffic_handles.append(Wget(site, self.traffic_commands.wget))
@@ -67,10 +70,10 @@ class TrafficHandler():
 
     def verify(self):
         if len(self.traffic_handles) == 0:
-            print("\tyou didn't request traffic on %s" % self.name)
+            print("\tyou didn't request traffic on %s" % self.machine_name())
             return
 
         for traffic_handle in self.traffic_handles:
-            print("%s - %s" % (self.name, traffic_handle.status()))
+            print("%s - %s" % (self.machine_name(), traffic_handle.status()))
 
         print("")

@@ -27,7 +27,7 @@ class TestVirtualBoxManage:
         assert subject.ip_pattern == re.compile(r'.*value: (.+), time.*')
         assert subject.command == 'VBoxManage'
         assert subject.ip == ''
-        assert subject.name == 'vbox'
+        assert subject.machine_name() == 'vbox'
         self.mock_node.assert_called_with(
             'vbox',
             self.mock_node_ssh_commands.return_value
@@ -55,7 +55,7 @@ class TestVirtualBoxManage:
         self.mock_sp.call.assert_called_with([
             subject.command,
             'startvm',
-            subject.name,
+            subject.machine_name(),
             '--type',
             'headless',
         ])
@@ -69,7 +69,7 @@ class TestVirtualBoxManage:
         self.mock_sp.call.assert_called_with([
             subject.command,
             'controlvm',
-            subject.name,
+            subject.machine_name(),
             'poweroff',
         ])
 
@@ -82,7 +82,7 @@ class TestVirtualBoxManage:
         self.mock_sp.call.assert_called_with([
             subject.command,
             'controlvm',
-            subject.name,
+            subject.machine_name(),
             'reset',
         ])
 
@@ -108,7 +108,7 @@ class TestVirtualBoxManage:
         self.mock_pexpect.spawn.assert_called_with(subject.command, [
             'guestproperty',
             'enumerate',
-            subject.name,
+            subject.machine_name(),
             'get',
             '/VirtualBox/GuestInfo/Net/0/V4/IP'
         ])

@@ -1,15 +1,20 @@
 # Copyright (c) 2019, Substratum LLC (https://substratum.net) and/or its affiliates. All rights reserved.
 import pytest
+from mock import MagicMock
+
 from instance import Instance
 
 class TestInstance:
 
     @pytest.fixture
     def subject(self, mocker):
-        self.subject = Instance(1, mocker.Mock(autospec=True))
+        instance_api = mocker.Mock(autospec=True)
+        instance_api.machine_name = mocker.Mock(return_value='billy')
+        self.subject = Instance(1, instance_api)
 
     def test_init(self, subject):
-        assert self.subject.name == 'node-1'
+        assert self.subject.index_name() == 'node-1'
+        assert self.subject.machine_name() == 'billy'
 
     def test_start(self, subject):
         result = self.subject.start()

@@ -1,12 +1,14 @@
 # Copyright (c) 2019, Substratum LLC (https://substratum.net) and/or its affiliates. All rights reserved.
 import pytest
+import tnt_config
 from command import SelectCommand
+
 
 class TestSelectCommand:
 
     @pytest.fixture
     def instances(self, mocker):
-        mocker.patch.dict('command.INSTANCES', first='Anakin', second='Obi-Wan', third='Ahsoka')
+        tnt_config.INSTANCES = {'first': 'Anakin', 'second': 'Obi-Wan', 'third': 'Ahsoka'}
 
     def test_construction(self):
         def run_it():

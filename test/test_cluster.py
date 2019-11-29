@@ -112,7 +112,7 @@ class TestCluster:
 
 def make_mock_instance(node_id, mocker):
     instance = mocker.Mock(autospec=True)
-    instance.name = 'node-%d' % node_id
+    instance._index_name = 'node-%d' % node_id
     instance.node_id = node_id
     instance.node.descriptor = ''
     return instance

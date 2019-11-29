@@ -1,18 +1,20 @@
 # Copyright (c) 2019, Substratum LLC (https://substratum.net) and/or its affiliates. All rights reserved.
 BINARIES = [
-    "SubstratumNode",
+    "MASQNode",
     "dns_utility",
 ]
 
 
 class Instance:
     def __init__(self, node_id, instance_api):
-        self.name = make_name(node_id)
+        self._index_name = make_index_name(node_id)
+        self._machine_name = instance_api.machine_name()
         self.node_id = node_id
         self.instance_api = instance_api
         self.dns = self.instance_api.dns
         self.traffic = self.instance_api.traffic
         self.node = self.instance_api.node
+        self.attributes = {}
 
     def start(self):
         self.instance_api.start_instance()
@@ -23,6 +25,12 @@ class Instance:
 
     def restart(self):
         return self.instance_api.restart_instance()
+
+    def index_name(self):
+        return self._index_name
+
+    def machine_name(self):
+        return self._machine_name
 
     def get_ip(self):
         return self.instance_api.get_external_ip()
@@ -75,5 +83,5 @@ class Instance:
         self.traffic.wget()
 
 
-def make_name(node_id):
+def make_index_name(node_id):
     return "node-%s" % int(node_id)

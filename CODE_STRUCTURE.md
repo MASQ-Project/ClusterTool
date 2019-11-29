@@ -13,14 +13,14 @@ The list of all commands that are available in the TNT is configured in `config.
 ## instance.py
 
 TNT commands are mostly implemented within `instance.py`. This is the file that has the ability
-to start or stop SubstratumNode, revert or subvert DNS, start, stop or verify traffic, etc, on the configured
+to start or stop MASQNode, revert or subvert DNS, start, stop or verify traffic, etc, on the configured
 instances.
 
 _The word *instance* is definitely overloaded in TNT. An instance generally refers to a cloud instance or VM, but can also refer to the class `Instance`, defined in this file, that handles all the communication to and from those instances._
 
 This file uses some helper files to accomplish related tasks:
 
- - node.py: SubstratumNode related logic
+ - node.py: MASQNode related logic
  - dns.py: DnsUtility related logic
  - traffic_handler: traffic generation/verification
 

@@ -17,7 +17,7 @@ class TestFinish:
     def instances(self, mocker):
         self.mock_first_instance = mocker.Mock()
         self.mock_second_instance = mocker.Mock()
-        mocker.patch.dict('command.INSTANCES', first=self.mock_first_instance, second=self.mock_second_instance)
+        mocker.patch.dict('tnt_config.INSTANCES', first=self.mock_first_instance, second=self.mock_second_instance)
 
     def test_name(self):
         assert name() == 'finish'

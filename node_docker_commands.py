@@ -17,24 +17,24 @@ class NodeDockerCommands(NodeCommands):
         self.executor = Executor()
         self.terminal_executor = TerminalExecutor(self.executor)
 
-    def start(self, node_args):
+    def start(self, args_map):
         if self._exists():
             self._docker_destroy()
 
-        return self._docker_run_node(node_args)
+        return self._docker_run_node(args_map)
 
     def stop(self):
         return self.executor.execute_sync(["docker", "stop", "-t0", self.name])
 
     def cat_logs(self):
-        command = ["docker", "exec", "-it", self.name, "cat", "/tmp/SubstratumNode_rCURRENT.log"]
+        command = ["docker", "exec", "-it", self.name, "cat", "/tmp/MASQNode_rCURRENT.log"]
         return self.executor.execute_async(command)
 
     def retrieve_logs(self, destination):
         args = [
             "docker",
             "cp",
-            "%s:%s" % (self.name, SUBSTRATUM_NODE_LOG),
+            "%s:%s" % (self.name, MASQ_NODE_LOG),
             destination,
         ]
         return self.executor.execute_sync(args)
@@ -44,7 +44,7 @@ class NodeDockerCommands(NodeCommands):
         return 0
 
     def tail(self):
-        command = "\"{0}({1})\" docker exec -it {0} tail -f -n 250 /tmp/SubstratumNode_rCURRENT.log".format(self.name,
+        command = "\"{0}({1})\" docker exec -it {0} tail -f -n 250 /tmp/MASQNode_rCURRENT.log".format(self.name,
                                                                                                    self.get_ip(),
                                                                                                    self.name)
         return self.terminal_executor.execute_in_new_terminal(command)
@@ -56,9 +56,9 @@ class NodeDockerCommands(NodeCommands):
     def delete_logs(self):
         pass
 
-    def _docker_run_node(self, node_args):
+    def _docker_run_node(self, args_map):
         volume = "%s/binaries/:/node_root/node" % os.getcwd()
-        command = [
+        command_prefix = [
             "docker",
             "run",
             "--detach",
@@ -69,17 +69,10 @@ class NodeDockerCommands(NodeCommands):
             "--net", "test_net",
             "--volume", volume,
             "test_net_tools",
-            "/node_root/node/SubstratumNode",
-            "--dns-servers", node_args["dns-servers"].split(' ')[1],
-            "--log-level", node_args["log-level"].split(' ')[1],
-            "--data-directory", node_args["data-directory"].split(' ')[1],
-            "--ip", self.get_ip(),
-            "--earning-wallet", Node.earning_wallet(self.get_ip()),
-            "--consuming-private-key", Node.consuming_private_key(self.get_ip()),
+            "/node_root/node/MASQNode"
         ]
-        if "additional-args" in node_args:
-            additional_args = node_args["additional-args"].split(' ')
-            command.extend(additional_args)
+        sorted_keys = sorted(args_map.keys())
+        command = reduce(lambda sofar, key: sofar + ["--%s" % key, args_map[key]], sorted_keys, command_prefix)
         return self.executor.execute_sync(command)
 
     def _docker_destroy(self):
