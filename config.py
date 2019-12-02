@@ -1,6 +1,6 @@
 # Copyright (c) 2019, Substratum LLC (https://substratum.net) and/or its affiliates. All rights reserved.
 from command import SelectCommand, SetCommand
-import finish, info, init, nfo, update, kill, start, help, daisy, cluster
+import finish, info, init, nfo, update, kill, start, help, daisy, cluster, binaries_command
 
 COMMANDS = {
     init.name(): init.command(),  # setup
@@ -25,6 +25,7 @@ COMMANDS = {
     daisy.name(): daisy.command(),
     cluster.name(): cluster.command(),
     'set': SetCommand(),
+    'binaries': binaries_command.BinariesCommand(),
 
     # TODO status command (finds out which instances are running (checks all platforms), for running instances, determines if node is running on them, if they are subverted, etc)
     # it should not load this state into INSTANCES automatically (multiple pairs could be using different cloud instances, so this should enable coordination)

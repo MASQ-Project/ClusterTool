@@ -22,7 +22,6 @@ class TestNodeDockerCommands:
 
     def test_start_nonexistent_default_binaries(self, mocks):
         subject = NodeDockerCommands('bacon', lambda: '1.2.3.4')
-        subject.setup({}, None)
         self.mock_executor.execute_async.return_value.expect.return_value = 1  # nonexistent
         node_args = {
             'dns-servers': '1.1.1.1',
@@ -31,7 +30,7 @@ class TestNodeDockerCommands:
         }
         self.mock_executor.execute_sync.return_value = 'success'
 
-        result = subject.start(node_args)
+        result = subject.start(node_args, None)
 
         self.mock_executor.execute_async.assert_called_with([
             'docker', 'ps', '--all', '-q', '-f name=bacon'
@@ -61,7 +60,6 @@ class TestNodeDockerCommands:
 
     def test_start_nonexistent_specific_binaries(self, mocks):
         subject = NodeDockerCommands('bacon', lambda: '1.2.3.4')
-        subject.setup({}, 'specific')
         self.mock_executor.execute_async.return_value.expect.return_value = 1  # nonexistent
         node_args = {
             'dns-servers': '1.1.1.1',
@@ -70,7 +68,7 @@ class TestNodeDockerCommands:
         }
         self.mock_executor.execute_sync.return_value = 'success'
 
-        result = subject.start(node_args)
+        result = subject.start(node_args, 'specific')
 
         self.mock_executor.execute_async.assert_called_with([
             'docker', 'ps', '--all', '-q', '-f name=bacon'
@@ -109,7 +107,7 @@ class TestNodeDockerCommands:
         }
         self.mock_executor.execute_sync.return_value = 'success'
 
-        result = subject.start(node_args)
+        result = subject.start(node_args, None)
 
         self.mock_executor.execute_async.assert_called_with([
             'docker', 'ps', '--all', '-q', '-f name=bacon'
@@ -182,7 +180,7 @@ class TestNodeDockerCommands:
     def test_update(self, mocks):
         subject = NodeDockerCommands('bacon', None)
 
-        result = subject.update('000000100000011000000111001111')
+        result = subject.update('000000100000011000000111001111', 'irrelevant')
 
         self.mock_print.assert_called_with('Binaries are volume-mapped for Docker-based Nodes; no update is required.')
 

@@ -12,12 +12,8 @@ class NodeSshCommands(cmd.NodeCommands):
         self.get_ip = ip_fn
         self.executor = Executor()
         self.terminal_executor = TerminalExecutor(self.executor)
-        self.binaries_version = None
 
-    def setup(self, args_map, binaries_version):
-        self.binaries_version = binaries_version
-
-    def start(self, args_map):
+    def start(self, args_map, irrelevant):
         sorted_keys = sorted(args_map.keys())
         command = reduce(lambda sofar, key: sofar + ["--%s" % key, args_map[key]], sorted_keys, ["sudo ./MASQNode"])
         command.extend([">", "/dev/null", "2>&1", "&"])
@@ -47,11 +43,11 @@ class NodeSshCommands(cmd.NodeCommands):
             self._wrap_with_scp(source, destination)
         )
 
-    def update(self, binary):
+    def update(self, binary, binaries_version):
         destination = "%s@%s:%s" % (tnt_config.INSTANCE_USER, self.get_ip(), binary)
         binary_path = os.path.join('binaries', binary)
-        if self.binaries_version is not None:
-            binary_path = os.path.join('binaries', self.binaries_version, binary)
+        if binaries_version is not None:
+            binary_path = os.path.join('binaries', binaries_version, binary)
         return self.executor.execute_sync(
             self._wrap_with_scp(binary_path, destination)
         )

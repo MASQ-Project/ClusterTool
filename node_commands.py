@@ -16,10 +16,7 @@ class NodeCommands:
         self.ip = ip
 
     @abstractmethod
-    def setup(self, args_map, binaries_version): raise NotImplementedError
-
-    @abstractmethod
-    def start(self, args_map): raise NotImplementedError
+    def start(self, args_map, binaries_version): raise NotImplementedError
 
     @abstractmethod
     def stop(self): raise NotImplementedError
@@ -31,7 +28,7 @@ class NodeCommands:
     def retrieve_logs(self, destination): raise NotImplementedError
 
     @abstractmethod
-    def update(self, binary): raise NotImplementedError
+    def update(self, binary, binaries_version): raise NotImplementedError
 
     @abstractmethod
     def shell(self): raise NotImplementedError
