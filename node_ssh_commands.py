@@ -12,6 +12,10 @@ class NodeSshCommands(cmd.NodeCommands):
         self.get_ip = ip_fn
         self.executor = Executor()
         self.terminal_executor = TerminalExecutor(self.executor)
+        self.binaries_version = None
+
+    def setup(self, args_map, binaries_version):
+        self.binaries_version = binaries_version
 
     def start(self, args_map):
         sorted_keys = sorted(args_map.keys())
@@ -45,8 +49,11 @@ class NodeSshCommands(cmd.NodeCommands):
 
     def update(self, binary):
         destination = "%s@%s:%s" % (tnt_config.INSTANCE_USER, self.get_ip(), binary)
+        binary_path = os.path.join('binaries', binary)
+        if self.binaries_version is not None:
+            binary_path = os.path.join('binaries', self.binaries_version, binary)
         return self.executor.execute_sync(
-            self._wrap_with_scp(os.path.join('binaries', binary), destination)
+            self._wrap_with_scp(binary_path, destination)
         )
 
     def tail(self):
@@ -62,8 +69,8 @@ class NodeSshCommands(cmd.NodeCommands):
         return self.terminal_executor.execute_in_new_terminal(wrapper_command)
 
     def _list_to_string(self, command_list):
-        seperator = ' '
-        return seperator.join(command_list)
+        separator = ' '
+        return separator.join(command_list)
 
     def _wrap_with_ssh(self, command_list):
         return wrap_with_ssh(tnt_config.INSTANCE_USER, self.get_ip(), command_list)

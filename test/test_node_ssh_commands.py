@@ -103,8 +103,9 @@ class TestNodeSshCommands:
         ])
         assert result == 'retrieved'
 
-    def test_update(self, mocks):
+    def test_update_default_binaries(self, mocks):
         subject = NodeSshCommands(lambda: '1.2.3.4')
+        subject.setup({}, None)
         self.mock_executor.return_value.execute_sync.return_value = 'updated'
 
         result = subject.update('binary')
@@ -112,6 +113,20 @@ class TestNodeSshCommands:
         self.mock_executor.return_value.execute_sync.assert_called_with([
             'scp', '-oStrictHostKeyChecking=no',
             os.path.join('binaries', 'binary'),
+            'mockeduser@1.2.3.4:binary',
+        ])
+        assert result == 'updated'
+
+    def test_update_specific_binaries(self, mocks):
+        subject = NodeSshCommands(lambda: '1.2.3.4')
+        subject.setup({}, 'specific')
+        self.mock_executor.return_value.execute_sync.return_value = 'updated'
+
+        result = subject.update('binary')
+
+        self.mock_executor.return_value.execute_sync.assert_called_with([
+            'scp', '-oStrictHostKeyChecking=no',
+            os.path.join('binaries', 'specific', 'binary'),
             'mockeduser@1.2.3.4:binary',
         ])
         assert result == 'updated'

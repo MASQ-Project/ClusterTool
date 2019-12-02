@@ -16,6 +16,10 @@ class NodeDockerCommands(NodeCommands):
         self.name = name
         self.executor = Executor()
         self.terminal_executor = TerminalExecutor(self.executor)
+        self.binaries_version = None
+
+    def setup(self, args_map, binaries_version):
+        self.binaries_version = binaries_version
 
     def start(self, args_map):
         if self._exists():
@@ -58,6 +62,8 @@ class NodeDockerCommands(NodeCommands):
 
     def _docker_run_node(self, args_map):
         volume = "%s/binaries/:/node_root/node" % os.getcwd()
+        if self.binaries_version is not None:
+            volume = "%s/binaries/%s/:/node_root/node" % (os.getcwd(), self.binaries_version)
         command_prefix = [
             "docker",
             "run",

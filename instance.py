@@ -15,6 +15,7 @@ class Instance:
         self.traffic = self.instance_api.traffic
         self.node = self.instance_api.node
         self.attributes = {}
+        self.binaries_version = None
 
     def start(self):
         self.instance_api.start_instance()
