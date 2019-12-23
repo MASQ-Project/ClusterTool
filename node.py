@@ -45,7 +45,7 @@ class Node:
         self.shutdown()
         print("\tSending updated binaries to %s instance" % self.machine_name())
         for executable in instance.BINARIES:
-            return_code = self.node_commands.update(executable)
+            return_code = self.node_commands.update(executable, self.instance.binaries_version)
             if return_code != 0:
                 print("*** scp failed with code %s ***" % return_code)
         print("\tdone.")
@@ -70,7 +70,7 @@ class Node:
         if neighbor_descriptors:
             args_map['neighbors'] = neighbor_descriptors
         args_map.update(self.instance.attributes)
-        self.node_commands.start(args_map)
+        self.node_commands.start(args_map, self.instance.binaries_version)
         self.descriptor = self._wait_for_descriptor()
 
     def retrieve_logs(self, to_dir):

@@ -20,7 +20,7 @@ class TestNodeDockerCommands:
         assert subject.name == 'bacon'
         self.mock_terminal_executor.assert_called_with(self.mock_executor)
 
-    def test_start_nonexistent(self, mocks):
+    def test_start_nonexistent_default_binaries(self, mocks):
         subject = NodeDockerCommands('bacon', lambda: '1.2.3.4')
         self.mock_executor.execute_async.return_value.expect.return_value = 1  # nonexistent
         node_args = {
@@ -30,7 +30,7 @@ class TestNodeDockerCommands:
         }
         self.mock_executor.execute_sync.return_value = 'success'
 
-        result = subject.start(node_args)
+        result = subject.start(node_args, None)
 
         self.mock_executor.execute_async.assert_called_with([
             'docker', 'ps', '--all', '-q', '-f name=bacon'
@@ -58,6 +58,44 @@ class TestNodeDockerCommands:
 
         assert result == 'success'
 
+    def test_start_nonexistent_specific_binaries(self, mocks):
+        subject = NodeDockerCommands('bacon', lambda: '1.2.3.4')
+        self.mock_executor.execute_async.return_value.expect.return_value = 1  # nonexistent
+        node_args = {
+            'dns-servers': '1.1.1.1',
+            'log-level': 'trace',
+            'data-directory': '/tmp'
+        }
+        self.mock_executor.execute_sync.return_value = 'success'
+
+        result = subject.start(node_args, 'specific')
+
+        self.mock_executor.execute_async.assert_called_with([
+            'docker', 'ps', '--all', '-q', '-f name=bacon'
+        ])
+        self.mock_executor.execute_async.return_value.expect.assert_called_with(
+            ['[0-9a-fA-F]+', pexpect.EOF],
+            timeout=None
+        )
+
+        self.mock_executor.execute_sync.assert_called_with([
+            'docker', 'run',
+            '--detach',
+            '--ip', '1.2.3.4',
+            '--dns', '127.0.0.1',
+            '--name', 'bacon',
+            '--hostname', 'bacon',
+            '--net', 'test_net',
+            '--volume', 'cwd/binaries/specific/:/node_root/node',
+            'test_net_tools',
+            '/node_root/node/MASQNode',
+            '--data-directory', '/tmp',
+            '--dns-servers', '1.1.1.1',
+            '--log-level', 'trace',
+        ])
+
+        assert result == 'success'
+
     def test_start_existing(self, mocks, mocker):
         subject = NodeDockerCommands('bacon', lambda: '1.2.3.4')
         self.mock_executor.execute_async.return_value.expect.return_value = 0  # existing
@@ -69,7 +107,7 @@ class TestNodeDockerCommands:
         }
         self.mock_executor.execute_sync.return_value = 'success'
 
-        result = subject.start(node_args)
+        result = subject.start(node_args, None)
 
         self.mock_executor.execute_async.assert_called_with([
             'docker', 'ps', '--all', '-q', '-f name=bacon'
@@ -142,7 +180,7 @@ class TestNodeDockerCommands:
     def test_update(self, mocks):
         subject = NodeDockerCommands('bacon', None)
 
-        result = subject.update('000000100000011000000111001111')
+        result = subject.update('000000100000011000000111001111', 'irrelevant')
 
         self.mock_print.assert_called_with('Binaries are volume-mapped for Docker-based Nodes; no update is required.')
 

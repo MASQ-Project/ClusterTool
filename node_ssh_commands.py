@@ -13,7 +13,7 @@ class NodeSshCommands(cmd.NodeCommands):
         self.executor = Executor()
         self.terminal_executor = TerminalExecutor(self.executor)
 
-    def start(self, args_map):
+    def start(self, args_map, irrelevant):
         sorted_keys = sorted(args_map.keys())
         command = reduce(lambda sofar, key: sofar + ["--%s" % key, args_map[key]], sorted_keys, ["sudo ./MASQNode"])
         command.extend([">", "/dev/null", "2>&1", "&"])
@@ -43,10 +43,13 @@ class NodeSshCommands(cmd.NodeCommands):
             self._wrap_with_scp(source, destination)
         )
 
-    def update(self, binary):
+    def update(self, binary, binaries_version):
         destination = "%s@%s:%s" % (tnt_config.INSTANCE_USER, self.get_ip(), binary)
+        binary_path = os.path.join('binaries', binary)
+        if binaries_version is not None:
+            binary_path = os.path.join('binaries', binaries_version, binary)
         return self.executor.execute_sync(
-            self._wrap_with_scp(os.path.join('binaries', binary), destination)
+            self._wrap_with_scp(binary_path, destination)
         )
 
     def tail(self):
@@ -62,8 +65,8 @@ class NodeSshCommands(cmd.NodeCommands):
         return self.terminal_executor.execute_in_new_terminal(wrapper_command)
 
     def _list_to_string(self, command_list):
-        seperator = ' '
-        return seperator.join(command_list)
+        separator = ' '
+        return separator.join(command_list)
 
     def _wrap_with_ssh(self, command_list):
         return wrap_with_ssh(tnt_config.INSTANCE_USER, self.get_ip(), command_list)

@@ -17,11 +17,11 @@ class NodeDockerCommands(NodeCommands):
         self.executor = Executor()
         self.terminal_executor = TerminalExecutor(self.executor)
 
-    def start(self, args_map):
+    def start(self, args_map, binaries_version):
         if self._exists():
             self._docker_destroy()
 
-        return self._docker_run_node(args_map)
+        return self._docker_run_node(args_map, binaries_version)
 
     def stop(self):
         return self.executor.execute_sync(["docker", "stop", "-t0", self.name])
@@ -39,7 +39,7 @@ class NodeDockerCommands(NodeCommands):
         ]
         return self.executor.execute_sync(args)
 
-    def update(self, binary):
+    def update(self, binary, irrelevant):
         print("Binaries are volume-mapped for Docker-based Nodes; no update is required.")
         return 0
 
@@ -56,8 +56,10 @@ class NodeDockerCommands(NodeCommands):
     def delete_logs(self):
         pass
 
-    def _docker_run_node(self, args_map):
+    def _docker_run_node(self, args_map, binaries_version):
         volume = "%s/binaries/:/node_root/node" % os.getcwd()
+        if binaries_version is not None:
+            volume = "%s/binaries/%s/:/node_root/node" % (os.getcwd(), binaries_version)
         command_prefix = [
             "docker",
             "run",
