@@ -32,6 +32,7 @@ class TestNode:
         one_mock_instance.machine_name = mocker.Mock(return_value='booga')
         one_mock_instance.index_name = mocker.Mock(return_value='node-0')
         one_mock_instance.attributes = {'log-level': 'error', 'dns-servers': '1.2.3.4', 'neighborhood-mode': 'originate-only'}
+        one_mock_instance.binaries_version = 'subdir'
         tnt_config.INSTANCES = {'booga': one_mock_instance}
         subject = Node('booga', self.mock_node_commands)
         self.mock_node_commands.cat_logs.return_value.expect.side_effect = [1, 0]
@@ -61,7 +62,7 @@ class TestNode:
             'consuming-private-key': '89d59b93ef6a94c977e1812b727d5f123f7d825ab636e83aad3e2845a68eaedb',
             'neighborhood-mode': 'originate-only',
             'neighbors': 'neighbor_descriptor',
-        })
+        }, 'subdir')
         assert real_descriptor == 'descriptor'
 
     def test_start_node_without_neighbors_wait_for_descriptor(self, node_commands, printing, mocker):
@@ -72,6 +73,7 @@ class TestNode:
         one_mock_instance.machine_name = mocker.Mock(return_value='booga')
         one_mock_instance.index_name = mocker.Mock(return_value='node-0')
         one_mock_instance.attributes = {}
+        one_mock_instance.binaries_version = 'subdir'
         tnt_config.INSTANCES = {'booga': one_mock_instance}
 
         real_descriptor = subject.start('1.2.3.4', "")
@@ -96,7 +98,7 @@ class TestNode:
             'ip': '1.2.3.4',
             'earning-wallet': '0x01020304010203040102030401020304EEEEEEEE',
             'consuming-private-key': '89d59b93ef6a94c977e1812b727d5f123f7d825ab636e83aad3e2845a68eaedb',
-        })
+        }, 'subdir')
         assert real_descriptor == 'descriptor'
         assert subject.instance.index_name() == 'node-0'
         assert subject.machine_name() == 'booga'
@@ -128,6 +130,9 @@ class TestNode:
     def test_update_successfully(self, node_commands, printing, mocker):
         subject = Node('booga', self.mock_node_commands)
         subject.descriptor = 'not_blanked'
+        instance = mocker.Mock()
+        instance.binaries_version = 'subdir'
+        subject.instance = instance
         self.mock_node_commands.update.return_value = 0
 
         subject.update()
@@ -141,13 +146,16 @@ class TestNode:
         self.mock_node_commands.stop.assert_called_with()
         assert subject.descriptor == ''
         assert self.mock_node_commands.update.mock_calls == [
-            mocker.call("MASQNode"),
-            mocker.call("dns_utility")
+            mocker.call('MASQNode', 'subdir'),
+            mocker.call('dns_utility', 'subdir')
         ]
 
     def test_update_failure(self, node_commands, printing, mocker):
         subject = Node('booga', self.mock_node_commands)
         subject.descriptor = 'not_blanked'
+        instance = mocker.Mock()
+        instance.binaries_version = None
+        subject.instance = instance
         self.mock_node_commands.update.return_value = 1
 
         subject.update()
