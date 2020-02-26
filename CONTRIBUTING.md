@@ -18,4 +18,4 @@
 
 This project and everyone participating in it is governed by the [MASQ Code of Conduct](CODE-OF-CONDUCT.md). 
 By participating, you are expected to uphold this code. 
-Please report unacceptable behavior to [code-of-conduct@substratum.net](mailto:code-of-conduct@substratum.net).
+Please report unacceptable behavior to [developers@masq.ai](mailto:developers@masq.ai).
